@@ -1,0 +1,40 @@
+/*!*********************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js!./style.scss ***!
+  \*********************************************************************************************************************************/
+@charset "UTF-8";
+tt-content {
+  /* indicates the stylesheet is loaded */
+  --joda-init: 1;
+}
+tt-content.debug * {
+  border: 1px solid red;
+  margin-left: 10px;
+  padding: 5px;
+}
+
+img {
+  --joda-wrap: "@image";
+  aspect-ratio: 1;
+  max-width: 100px;
+}
+
+.mask {
+  --mask-image: url(/assets/morphing.svg);
+  mask-mode: alpha;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+}
+
+.row > div {
+  --joda-class: ":: col-12 :xl: col";
+}
+
+.header1 {
+  --joda-tpl: wumme(asi: 1, muschi: "wurst");
+}
+
+.tt-card {
+  --tjs-param-def--title: "Hier können Sie einen Titel eingeben";
+  --title: "Default Title";
+  --tjs-replace-by: "@card :: col-12 :xl: col-6 > @card-body >| Card Hello World" ;
+}
