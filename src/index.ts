@@ -1,4 +1,3 @@
 
 
-import "./component/tt-content";
-import "./component/joda-content-component"
+import "./component/joda-content-element";

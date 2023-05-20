@@ -22,8 +22,8 @@ function getCSSRule(ruleName : string) : CSSStyleRule {
 
 
 
-@customElement("tt-content")
-export class TtContentComponent extends HTMLElement {
+@customElement("joda-content")
+export class JodaContentElement extends HTMLElement {
 
     #origContentTemplate: HTMLTemplateElement;
     #outputDiv : HTMLDivElement;
