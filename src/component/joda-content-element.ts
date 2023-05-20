@@ -1,5 +1,4 @@
 import {customElement, ka_create_element, ka_sleep} from "@kasimirjs/embed";
-import {commands} from "./commands";
 import {Jodasplit} from "../processor/jodasplit";
 import {Jodastyle} from "../processor/jodastyle";
 import {getCurrentBreakpoint, Jodaresponsive} from "../processor/jodaresponsive";
@@ -49,10 +48,10 @@ export class JodaContentElement extends HTMLElement {
         this.#outputDiv.childNodes.forEach( (child) => {
             let jodaStyle = new Jodastyle();
 
-            jodaStyle.process(child);
+            jodaStyle.process(child as HTMLElement);
 
 
-            jodaresponsive.process(child);
+            jodaresponsive.process(child as HTMLElement);
             console.timeLog("time");
         });
 
@@ -64,7 +63,7 @@ export class JodaContentElement extends HTMLElement {
             }
             currentBreakpoint = getCurrentBreakpoint();
             this.#outputDiv.childNodes.forEach( (child) => {
-                jodaresponsive.process(child);
+                jodaresponsive.process(child as HTMLElement);
             });
         });
     }
