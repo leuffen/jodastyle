@@ -1,6 +1,6 @@
 import {ka_sleep} from "@kasimirjs/embed";
-import {JodaTemplate} from "../types/JodaTemplate";
 import {JodaRendererInterface} from "./JodaRenderer";
+import {DefaultLayout} from "../../../../src/core/DefaultLayout";
 
 
 export async function await_property(object : object, property : string[] | string, wait : number = 10) {
@@ -32,19 +32,25 @@ export async function await_property(object : object, property : string[] | stri
 
 
 
-export function registerJodaRenderer(name : string, callback : JodaRendererInterface) {
+export type JodaUseRenderer = {
+    renderer: new() => JodaRendererInterface,
+    config: new() => DefaultLayout
+}
+
+export function registerJodaRenderer(name : string, renderer : new() => JodaRendererInterface, config : new() => DefaultLayout) {
     if (window["jodastyle"] === undefined) {
         window["jodastyle"] = {};
     }
     if (window["jodastyle"]["renderer"] === undefined) {
         window["jodastyle"]["renderer"] = {};
     }
-    window["jodastyle"]["renderer"][name] = callback;
+    window["jodastyle"]["renderer"][name] = {renderer, config};
 }
 
 
-export function jodaRenderer(name : string) {
-    return function (classOrDescriptor: JodaRendererInterface) : void {
-        registerJodaRenderer(name, classOrDescriptor);
+export function jodaRenderer(name : string, config : new() => DefaultLayout) {
+    return function (classOrDescriptor: new() => JodaRendererInterface) : void {
+        console.log(classOrDescriptor);
+        registerJodaRenderer(name, classOrDescriptor, config);
     }
 }

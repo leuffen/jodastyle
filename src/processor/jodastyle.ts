@@ -1,33 +1,34 @@
 import {jodaStyleCommands} from "./jodastyle-commands";
+import {Logger} from "../helper/logger";
 
 
 export class Jodastyle {
 
 
+    constructor(public logger : Logger) {
+    }
 
-    public process(node : HTMLElement) {
+    public async process(node : HTMLElement) {
 
-        Array.from(node.querySelectorAll<HTMLElement>("*")).forEach((child) => {
+        for (let child of [node, ...Array.from(node.querySelectorAll<HTMLElement>("*"))]) {
             let style = getComputedStyle(child);
             let keys = Object.keys(jodaStyleCommands);
-            Array.from(keys).forEach((key) => {
+            for (let key of Array.from(keys)) {
+
                 let styleValue = style.getPropertyValue(key);
                 if (styleValue === "") {
-                    return;
+                    continue;
                 }
                 if (styleValue === getComputedStyle(child.parentElement).getPropertyValue(key)) {
-                    return; // Inherited from parent
+                    continue; // Inherited from parent
                 }
 
                 // Replace starting and ending with " or ' with nothing
                 styleValue = styleValue.trim().replace(/^["']/g, '').replace(/["']$/, '').trim();
 
                 let command = jodaStyleCommands[key];
-                child = command(styleValue, node as HTMLDivElement, child) as HTMLElement;
-
-            });
-        });
-
-
+                child = await command(styleValue, node as HTMLDivElement, child, this.logger) as HTMLElement;
+            }
+        }
     }
 }

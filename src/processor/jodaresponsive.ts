@@ -1,3 +1,4 @@
+import {Logger} from "../helper/logger";
 
 
 export const breakpoints = {
@@ -23,6 +24,7 @@ export function getCurrentBreakpoint() : string {
 class ResponsiveClass {
     always: string[] = [];
     default: string[] = null;
+    xsm: null = null;
     xs: string[] = null;
     sm: string[] = null;
     md: string[] = null;
@@ -30,26 +32,30 @@ class ResponsiveClass {
     xl: string[] = null;
     xxl: string[] = null;
 
-    breakpoints = ["xs", "sm", "md", "lg", "xl", "xxl"];
+    breakpoints = ["xsm", "xs", "sm", "md", "lg", "xl", "xxl"];
 
     getClassesForBreakpoint(breakpoint : string = null) : string[] {
         if (breakpoint === null) {
             breakpoint = getCurrentBreakpoint();
         }
-        let minWidth = breakpoints[breakpoint];
+
 
         let ret = [];
         ret.push(...this.always);
         let isDefault = true;
-        this.breakpoints.forEach((bp) => {
-            if (breakpoints[bp] < minWidth) {
-                ret.push(...this[bp] ?? []);
+        for (let bp of this.breakpoints) {
+            if (this[bp] !== null) {
+                ret.push(...this[bp]);
                 isDefault = false;
             }
-        });
+            if (bp === breakpoint) {
+                break;
+            }
+        }
         if (isDefault) {
             ret.push(...this.default);
         }
+        ret = ret.filter((item) => item !== "");
         return ret;
     };
 }
@@ -60,7 +66,6 @@ export function parseClassStr(input : string) : ResponsiveClass {
     input.split(" ").map((item) => {
         let matches = item.match(/\:([a-zA-Z]*)\:/);
         if (matches === null) {
-            console.log("pointer", pointer);
             ret[pointer].push(item);
             return;
         }
@@ -79,11 +84,13 @@ export function parseClassStr(input : string) : ResponsiveClass {
 export class Jodaresponsive {
 
 
+    constructor(public logger : Logger) {
+    }
 
     private processNode(node : HTMLElement) {
         const origAttr = "data-class-orig";
         if ( ! node.hasAttribute(origAttr)) {
-            let classes = node.getAttribute("class")
+            let classes = node.getAttribute("class") ?? "";
             if (classes.indexOf(":") === -1)
                 return;
             node.setAttribute(origAttr, classes);
@@ -91,14 +98,14 @@ export class Jodaresponsive {
         let classes = node.getAttribute(origAttr);
         let responsiveClasses = parseClassStr(classes);
 
-        console.log("responsiveClasses", responsiveClasses.getClassesForBreakpoint());
         node.setAttribute("class", "");
         node.classList.add(...responsiveClasses.getClassesForBreakpoint());
 
     }
 
     process(node : HTMLElement) {
-        Array.from(node.querySelectorAll<HTMLElement>("*[class]")).forEach((child) => {
+        this.logger.log("adjust styles; new breakpoint is", getCurrentBreakpoint());
+        Array.from([node, ...node.querySelectorAll<HTMLElement>("*")]).forEach((child) => {
             this.processNode(child);
         });
 

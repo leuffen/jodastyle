@@ -2,6 +2,7 @@ import {customElement, ka_create_element, ka_sleep} from "@kasimirjs/embed";
 import {Jodasplit} from "../processor/jodasplit";
 import {Jodastyle} from "../processor/jodastyle";
 import {getCurrentBreakpoint, Jodaresponsive} from "../processor/jodaresponsive";
+import {Logger} from "../helper/logger";
 
 
 function getCSSRule(ruleName : string) : CSSStyleRule {
@@ -28,6 +29,22 @@ export class JodaContentElement extends HTMLElement {
     #outputDiv : HTMLDivElement;
 
 
+    async awaitStyles() {
+        let index = 0;
+        while(true) {
+            index++;
+            if (getComputedStyle(this).getPropertyValue("--joda-init") === "true") {
+                break;
+            }
+            if (index > 100) {
+                index = 0;
+                console.warn("Still waiting for --joda-init: true", this);
+            }
+            await ka_sleep(10 + index);
+        }
+    }
+
+
     async connectedCallback() {
         await ka_sleep(1);
         console.time("time");
@@ -40,21 +57,28 @@ export class JodaContentElement extends HTMLElement {
 
         console.timeLog("time")
 
-        let jodaSplit = new Jodasplit();
-        let jodaresponsive = new Jodaresponsive();
+        let logger = new Logger("joda-content");
+        let jodaSplit = new Jodasplit(logger);
+        let jodaresponsive = new Jodaresponsive(logger);
         let currentBreakpoint = getCurrentBreakpoint();
+
+        // Split the content
         this.#outputDiv.appendChild(jodaSplit.process(this.#origContentTemplate.content.cloneNode(true) as DocumentFragment));
+
+        // Wait for styles to load
+        await this.awaitStyles();
+
+        // Process the content
         console.timeLog("time")
-        this.#outputDiv.childNodes.forEach( (child) => {
-            let jodaStyle = new Jodastyle();
+        for(let child of Array.from(this.#outputDiv.childNodes)) {
+            let jodaStyle = new Jodastyle(logger);
 
-            jodaStyle.process(child as HTMLElement);
+            await jodaStyle.process(child as HTMLElement);
 
-
-            jodaresponsive.process(child as HTMLElement);
             console.timeLog("time");
-        });
+        };
 
+        jodaresponsive.process(this.#outputDiv as HTMLElement);
         console.timeEnd("time")
 
         window.addEventListener("resize", () => {

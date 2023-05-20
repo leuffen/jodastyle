@@ -1,4 +1,5 @@
 import {ka_create_element} from "@kasimirjs/embed";
+import {Logger} from "../helper/logger";
 
 
 interface JodaSplitConfig {
@@ -12,6 +13,9 @@ export class Jodasplit {
     #parents = [this.#target];
     #currentParent : HTMLElement = ka_create_element("section", {class: "section-h1pre"})
 
+
+    constructor(public logger : Logger) {
+    }
 
     private findParentElement(layer : number) : HTMLElement | DocumentFragment {
         while (this.#parents.length > layer) {
