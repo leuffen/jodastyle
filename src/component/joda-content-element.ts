@@ -86,6 +86,7 @@ export class JodaContentElement extends HTMLElement {
                 return;
             }
             currentBreakpoint = getCurrentBreakpoint();
+            logger.log("Breakpoint changed to " + currentBreakpoint);
             this.#outputDiv.childNodes.forEach( (child) => {
                 jodaresponsive.process(child as HTMLElement);
             });

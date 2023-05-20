@@ -104,7 +104,6 @@ export class Jodaresponsive {
     }
 
     process(node : HTMLElement) {
-        this.logger.log("adjust styles; new breakpoint is", getCurrentBreakpoint());
         Array.from([node, ...node.querySelectorAll<HTMLElement>("*")]).forEach((child) => {
             this.processNode(child);
         });
