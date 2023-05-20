@@ -10,7 +10,7 @@ interface JodaSplitConfig {
 export class Jodasplit {
     #target = document.createDocumentFragment();
     #parents = [this.#target];
-    #currentParent : HTMLElement = ka_create_element("section", {class: "section-h1"})
+    #currentParent : HTMLElement = ka_create_element("section", {class: "section-h1pre"})
 
 
     private findParentElement(layer : number) : HTMLElement | DocumentFragment {
@@ -39,6 +39,7 @@ export class Jodasplit {
 
     process (source : DocumentFragment) : DocumentFragment {
         let lastLayer = 1;
+        this.#target.append(this.#currentParent);
         Array.from(source.children).forEach((child : Element) => {
 
             if (child instanceof HTMLElement && child.matches("h1, h2, h3, h4, h5, h6, h7, h8, h9, hr")) {

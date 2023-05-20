@@ -1,3 +1,5 @@
 
+export * from "./helper/JodaRenderer";
 
-import "./component/joda-content-element";
+export * from  "./component/joda-content-element";
+export * from  "./helper/functions";
