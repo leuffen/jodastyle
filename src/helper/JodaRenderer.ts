@@ -1,4 +1,5 @@
-import {DefaultLayout} from "../../../../src/core/DefaultLayout";
+import {DefaultLayout} from "../types/DefaultLayout";
+
 
 export interface JodaRendererInterface {
 

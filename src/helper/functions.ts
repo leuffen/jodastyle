@@ -1,6 +1,6 @@
 import {ka_sleep} from "@kasimirjs/embed";
 import {JodaRendererInterface} from "./JodaRenderer";
-import {DefaultLayout} from "../../../../src/core/DefaultLayout";
+import {DefaultLayout} from "../types/DefaultLayout";
 
 
 export async function await_property(object : object, property : string[] | string, wait : number = 10) {
