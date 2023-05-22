@@ -104,7 +104,7 @@ export class Jodaresponsive {
     }
 
     process(node : HTMLElement) {
-        Array.from([node, ...node.querySelectorAll<HTMLElement>("*")]).forEach((child) => {
+        Array.from([node, ...Array.from(node.querySelectorAll<HTMLElement>("*"))]).forEach((child) => {
             this.processNode(child);
         });
 

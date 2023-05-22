@@ -9,7 +9,7 @@ export function template_parse(input : string, scope : {}, element: HTMLElement 
     // Search for ${...} by preg and replace them with the result of the expression
 
     return input.replace(/\[\[(.*?)]]/gmi, (match, p1) => {
-        let val =  ka_eval(p1, scope, element);
+        let val =  ka_eval(p1, scope, element, {});
         return val;
     });
 }
@@ -39,7 +39,7 @@ export class QTemplate {
 
         //console.log("Parse", this.content, this.content.toString());
         tpl.innerHTML =  template_parse(tpl.innerHTML, scope, tpl);
-        this.content = tpl.content.firstElementChild;
+        this.content = tpl.content.firstElementChild as HTMLElement | HTMLDivElement;
         return this;
     }
 
@@ -54,7 +54,7 @@ export class QTemplate {
     public select(data_ref : string) : this {
         this.selected = this.by(data_ref);
         if (this.selected === null) {
-            console.error("Element with data-ref '" + data_ref + "' not found.", this.fromTemplate)
+            console.error("Element with data-ref '" + data_ref + "' not found.", this.content)
             throw "Element with data-ref '" + data_ref + "' not found."
         }
         return this;
