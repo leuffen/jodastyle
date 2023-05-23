@@ -53,7 +53,11 @@ export class QTemplate {
      * @param data_ref
      */
     public by(data_ref : string) : HTMLDivElement | HTMLElement {
-        return this.content.querySelector(`[data-ref="${data_ref}"]`);
+        let selector = `[data-ref="${data_ref}"]`;
+        if (this.content.matches(selector)) {
+            return this.content;
+        }
+        return this.content.querySelector(selector);
     }
 
     public select(data_ref : string) : this {

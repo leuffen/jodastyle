@@ -54,3 +54,20 @@ export function jodaRenderer(name : string, config : new() => DefaultLayout) {
         registerJodaRenderer(name, classOrDescriptor, config);
     }
 }
+
+
+
+export function splitChildrenBySelector(element : HTMLElement, splitBySelctor : string) : DocumentFragment[] {
+    let ret : DocumentFragment[] = [];
+    Array.from(element.children).forEach(child => {
+        if (child.matches(splitBySelctor)) {
+            ret.push(document.createDocumentFragment());
+        }
+        ret[ret.length - 1].append(child);
+    });
+    return ret;
+}
+
+export function getCleanVariableValue(styleValue : string) : string {
+    return styleValue.trim().replace(/^["']/g, '').replace(/["']$/, '').trim()
+}
