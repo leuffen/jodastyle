@@ -3,6 +3,7 @@ import {Jodasplit} from "../processor/jodasplit";
 import {Jodastyle} from "../processor/jodastyle";
 import {getCurrentBreakpoint, Jodaresponsive} from "../processor/jodaresponsive";
 import {Logger} from "../helper/logger";
+import {JodaImageProc} from "../processor/jodaimageproc";
 
 
 function getCSSRule(ruleName : string) : CSSStyleRule {
@@ -20,7 +21,7 @@ function getCSSRule(ruleName : string) : CSSStyleRule {
     return result;
 }
 
-
+console.time("jodaTime");
 
 @customElement("joda-content")
 export class JodaContentElement extends HTMLElement {
@@ -46,8 +47,14 @@ export class JodaContentElement extends HTMLElement {
 
 
     async connectedCallback() {
+
+        let logger = new Logger("joda-content");
         await ka_sleep(1);
-        console.time("time");
+
+
+        let jodaImage = new JodaImageProc(logger);
+        await jodaImage.process(this);
+
         this.#origContentTemplate = ka_create_element("template") as HTMLTemplateElement;
         this.#outputDiv = ka_create_element("div") as HTMLDivElement;
         this.#origContentTemplate.innerHTML = this.innerHTML;
@@ -57,7 +64,6 @@ export class JodaContentElement extends HTMLElement {
 
         console.timeLog("time")
 
-        let logger = new Logger("joda-content");
         let jodaSplit = new Jodasplit(logger);
         let jodaresponsive = new Jodaresponsive(logger);
         let currentBreakpoint = getCurrentBreakpoint();
@@ -69,17 +75,15 @@ export class JodaContentElement extends HTMLElement {
         await this.awaitStyles();
 
         // Process the content
-        console.timeLog("time")
         for(let child of Array.from(this.#outputDiv.childNodes)) {
             let jodaStyle = new Jodastyle(logger);
 
             await jodaStyle.process(child as HTMLElement);
 
-            console.timeLog("time");
         };
 
         jodaresponsive.process(this.#outputDiv as HTMLElement);
-        console.timeEnd("time")
+        console.timeLog("jodaTime")
 
         window.addEventListener("resize", () => {
             if (currentBreakpoint === getCurrentBreakpoint()) {
