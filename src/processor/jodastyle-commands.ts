@@ -1,6 +1,7 @@
 import {createElementTree} from "../helper/ka-quick-template";
 import {await_property, getCleanVariableValue, JodaUseRenderer} from "../helper/functions";
 import {Logger} from "../helper/logger";
+import {ka_eval} from "@kasimirjs/embed";
 
 type Commands = {
     [command: string]: ((value : string, target : HTMLDivElement, element : HTMLElement, logger : Logger) => HTMLElement|Promise<HTMLElement>);
@@ -58,8 +59,9 @@ jodaStyleCommands["--joda-group"] = (value : string, target, element : HTMLEleme
 
     let parent = element.parentElement;
     let ret = createElementTree(value)
-    parent.replaceChild(ret.start, element);
 
+    // Insert the Element
+    element.parentElement.insertBefore(ret.start, element);
 
 
     ret.leaf.append(element);
@@ -86,7 +88,8 @@ jodaStyleCommands["--joda-use"] = async(value : string, target, element : HTMLEl
     }
     logger.log("Using renderer: ", matches[1], "with args: ", matches[2], "on element", element);
     let commandName = matches[1];
-    let args = JSON.parse("{" + matches[2] + "}");
+    //console.log("interpret", "{" + matches[2] + "}")
+    let args = ka_eval("{" + matches[2] + "}", {}, target, {});
     let command = await await_property(window, ["jodastyle", "renderer", commandName]) as JodaUseRenderer;
 
     let config = new command.config();

@@ -85,6 +85,14 @@ export class JodaContentElement extends HTMLElement {
         jodaresponsive.process(this.#outputDiv as HTMLElement);
         console.timeLog("jodaTime")
 
+        await ka_sleep(1);
+        this.classList.add("loaded");
+
+        await ka_sleep(1);
+        if (this.hasAttribute("data-master")) {
+            document.body.classList.add("loaded");
+        }
+
         window.addEventListener("resize", () => {
             if (currentBreakpoint === getCurrentBreakpoint()) {
                 return;
