@@ -34,7 +34,7 @@ export class JodaContentElement extends HTMLElement {
         let index = 0;
         while(true) {
             index++;
-            if (getComputedStyle(this).getPropertyValue("--joda-init") === "true") {
+            if (getComputedStyle(this).getPropertyValue("--joda-init").indexOf("true") !== -1) {
                 break;
             }
             if (index > 100) {
