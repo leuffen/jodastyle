@@ -39,7 +39,7 @@ export class JodaContentElement extends HTMLElement {
             }
             if (index > 100) {
                 index = 0;
-                console.warn("Still waiting for --joda-init: true", this);
+                console.warn("Still waiting for --joda-init: true", this, "current value:", getComputedStyle(this).getPropertyValue("--joda-init"));
             }
             await ka_sleep(10 + index);
         }
