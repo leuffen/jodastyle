@@ -41,6 +41,7 @@ export class JodaImageProc {
                 return 1;
             return 0;
         });
+
         let fit = data.find((e) => e.width >= window.innerWidth);
         if (typeof fit === "undefined")
             fit = data[data.length - 1];

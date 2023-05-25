@@ -15,7 +15,7 @@ export class LeuCDNImageProc implements JodaImageProcessorInterface {
         url = url.replace("cdn+https://", "https://");
         url = url.replace("cdn://", "https://cdn.leuffen.de");
         url = url.replace(/\/(([0-9]+x[0-9]+|[,_])+)\//ig, (p0, sizes: string) => {
-            sizes.split(",").forEach((size) => {
+            sizes.split(/[,_]/g).forEach((size) => {
                 ret.resolutions.push(
                     {
                         width: parseInt(size.split("x")[0]),
