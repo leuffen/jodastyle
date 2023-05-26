@@ -41,7 +41,7 @@ export class JodaContentElement extends HTMLElement {
                 index = 0;
                 console.warn("Still waiting for --joda-init: true", this, "current value:", getComputedStyle(this).getPropertyValue("--joda-init"));
             }
-            await ka_sleep(10 + index);
+            await ka_sleep(50 + index);
         }
     }
 
@@ -62,8 +62,6 @@ export class JodaContentElement extends HTMLElement {
         this.appendChild(this.#origContentTemplate);
         this.appendChild(this.#outputDiv);
 
-        console.timeLog("time")
-
         let jodaSplit = new Jodasplit(logger);
         let jodaresponsive = new Jodaresponsive(logger);
         let currentBreakpoint = getCurrentBreakpoint();
@@ -83,7 +81,6 @@ export class JodaContentElement extends HTMLElement {
         };
 
         jodaresponsive.process(this.#outputDiv as HTMLElement);
-        console.timeLog("jodaTime")
 
         await ka_sleep(1);
         this.classList.add("loaded");
