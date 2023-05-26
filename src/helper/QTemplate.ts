@@ -21,8 +21,13 @@ export class QTemplate {
 
     public selected : HTMLElement | HTMLDivElement | null;
 
-    constructor(content:  HTMLTemplateElement | HTMLElement | HTMLDivElement) {
-        this.content = content;
+    constructor(content:  HTMLTemplateElement | HTMLElement | HTMLDivElement | string) {
+        if (typeof content === "string") {
+            this.content = ka_create_element("template");
+            this.content.innerHTML = content;
+        } else {
+            this.content = content;
+        }
         if (this.content instanceof HTMLTemplateElement) {
             if (this.content.content.children.length > 1) {
                 throw new Error("Template must have exactly one root element. Found: " + this.content.innerHTML);
@@ -48,7 +53,11 @@ export class QTemplate {
      * @param data_ref
      */
     public by(data_ref : string) : HTMLDivElement | HTMLElement {
-        return this.content.querySelector(`[data-ref="${data_ref}"]`);
+        let selector = `[data-ref="${data_ref}"]`;
+        if (this.content.matches(selector)) {
+            return this.content;
+        }
+        return this.content.querySelector(selector);
     }
 
     public select(data_ref : string) : this {
@@ -74,6 +83,10 @@ export class QTemplate {
     public append(element : Node | HTMLElement | Array<HTMLElement> | NodeList | DocumentFragment | QTemplate) : this {
         if (element instanceof QTemplate) {
             this.selected.append(element.content);
+            return this;
+        }
+        if (element instanceof NodeList) {
+            Array.from(element).forEach(e => this.selected.append(e));
             return this;
         }
         if (Array.isArray(element) || element instanceof NodeList) {

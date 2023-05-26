@@ -1,6 +1,7 @@
 import {createElementTree} from "../helper/ka-quick-template";
-import {await_property, JodaUseRenderer} from "../helper/functions";
+import {await_property, getCleanVariableValue, JodaUseRenderer} from "../helper/functions";
 import {Logger} from "../helper/logger";
+import {ka_eval} from "@kasimirjs/embed";
 
 type Commands = {
     [command: string]: ((value : string, target : HTMLDivElement, element : HTMLElement, logger : Logger) => HTMLElement|Promise<HTMLElement>);
@@ -33,17 +34,40 @@ jodaStyleCommands["--joda-wrap"] = (value : string, target, element : HTMLElemen
     return element;
 }
 
-jodaStyleCommands["--joda-wrap-same"] = (value : string, target, element : HTMLElement, logger : Logger) => {
-    if (element["jodaIsWrappedSame"] !== undefined) {
+
+/**
+ * --joda-group: @row
+ * @param value
+ * @param target
+ * @param element
+ * @param logger
+ */
+jodaStyleCommands["--joda-group"] = (value : string, target, element : HTMLElement, logger : Logger) => {
+    const groupByKey = "jodaIsGroupedBy";
+    if (element[groupByKey] !== undefined) {
         return element;
     }
+
+    let siblings = [];
+    let curSibling = element.nextElementSibling;
+    while (curSibling && getCleanVariableValue(getComputedStyle(curSibling).getPropertyValue("--joda-group")) === value) {
+        siblings.push(curSibling);
+        curSibling[groupByKey] = true;
+        curSibling = curSibling.nextElementSibling;
+    }
+
+
     let parent = element.parentElement;
     let ret = createElementTree(value)
 
-    parent.replaceChild(ret.start, element);
+    // Insert the Element
+    element.parentElement.insertBefore(ret.start, element);
 
 
     ret.leaf.append(element);
+    siblings.forEach((sibling) => {
+        ret.leaf.append(sibling);
+    });
 
     return element;
 }
@@ -64,7 +88,8 @@ jodaStyleCommands["--joda-use"] = async(value : string, target, element : HTMLEl
     }
     logger.log("Using renderer: ", matches[1], "with args: ", matches[2], "on element", element);
     let commandName = matches[1];
-    let args = JSON.parse("{" + matches[2] + "}");
+    //console.log("interpret", "{" + matches[2] + "}")
+    let args = ka_eval("{" + matches[2] + "}", {}, target, {});
     let command = await await_property(window, ["jodastyle", "renderer", commandName]) as JodaUseRenderer;
 
     let config = new command.config();

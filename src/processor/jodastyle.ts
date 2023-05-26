@@ -1,5 +1,6 @@
 import {jodaStyleCommands} from "./jodastyle-commands";
 import {Logger} from "../helper/logger";
+import {getCleanVariableValue} from "../helper/functions";
 
 
 export class Jodastyle {
@@ -24,7 +25,7 @@ export class Jodastyle {
                 }
 
                 // Replace starting and ending with " or ' with nothing
-                styleValue = styleValue.trim().replace(/^["']/g, '').replace(/["']$/, '').trim();
+                styleValue = getCleanVariableValue(styleValue)
 
                 let command = jodaStyleCommands[key];
                 child = await command(styleValue, node as HTMLDivElement, child, this.logger) as HTMLElement;

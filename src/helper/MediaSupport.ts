@@ -1,7 +1,7 @@
 const bestFormats = [
     "svg", "avif", "webp", "jpg", "jpeg", "png", "gif"
 ]
-class MediaSupport {
+export class MediaSupport {
 
 
 

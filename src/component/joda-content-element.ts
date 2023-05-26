@@ -3,6 +3,7 @@ import {Jodasplit} from "../processor/jodasplit";
 import {Jodastyle} from "../processor/jodastyle";
 import {getCurrentBreakpoint, Jodaresponsive} from "../processor/jodaresponsive";
 import {Logger} from "../helper/logger";
+import {JodaImageProc} from "../processor/jodaimageproc";
 
 
 function getCSSRule(ruleName : string) : CSSStyleRule {
@@ -20,7 +21,7 @@ function getCSSRule(ruleName : string) : CSSStyleRule {
     return result;
 }
 
-
+console.time("jodaTime");
 
 @customElement("joda-content")
 export class JodaContentElement extends HTMLElement {
@@ -33,21 +34,27 @@ export class JodaContentElement extends HTMLElement {
         let index = 0;
         while(true) {
             index++;
-            if (getComputedStyle(this).getPropertyValue("--joda-init") === "true") {
+            if (getComputedStyle(this).getPropertyValue("--joda-init").indexOf("true") !== -1) {
                 break;
             }
             if (index > 100) {
                 index = 0;
-                console.warn("Still waiting for --joda-init: true", this);
+                console.warn("Still waiting for --joda-init: true", this, "current value:", getComputedStyle(this).getPropertyValue("--joda-init"));
             }
-            await ka_sleep(10 + index);
+            await ka_sleep(50 + index);
         }
     }
 
 
     async connectedCallback() {
+
+        let logger = new Logger("joda-content");
         await ka_sleep(1);
-        console.time("time");
+
+
+        let jodaImage = new JodaImageProc(logger);
+        await jodaImage.process(this);
+
         this.#origContentTemplate = ka_create_element("template") as HTMLTemplateElement;
         this.#outputDiv = ka_create_element("div") as HTMLDivElement;
         this.#origContentTemplate.innerHTML = this.innerHTML;
@@ -55,9 +62,6 @@ export class JodaContentElement extends HTMLElement {
         this.appendChild(this.#origContentTemplate);
         this.appendChild(this.#outputDiv);
 
-        console.timeLog("time")
-
-        let logger = new Logger("joda-content");
         let jodaSplit = new Jodasplit(logger);
         let jodaresponsive = new Jodaresponsive(logger);
         let currentBreakpoint = getCurrentBreakpoint();
@@ -69,17 +73,22 @@ export class JodaContentElement extends HTMLElement {
         await this.awaitStyles();
 
         // Process the content
-        console.timeLog("time")
         for(let child of Array.from(this.#outputDiv.childNodes)) {
             let jodaStyle = new Jodastyle(logger);
 
             await jodaStyle.process(child as HTMLElement);
 
-            console.timeLog("time");
         };
 
         jodaresponsive.process(this.#outputDiv as HTMLElement);
-        console.timeEnd("time")
+
+        await ka_sleep(1);
+        this.classList.add("loaded");
+
+        await ka_sleep(1);
+        if (this.hasAttribute("data-master")) {
+            document.body.classList.add("loaded");
+        }
 
         window.addEventListener("resize", () => {
             if (currentBreakpoint === getCurrentBreakpoint()) {
