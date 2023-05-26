@@ -54,3 +54,5 @@ export function jodaRenderer(name : string, config : new() => DefaultLayout) {
         registerJodaRenderer(name, classOrDescriptor, config);
     }
 }
+
+
