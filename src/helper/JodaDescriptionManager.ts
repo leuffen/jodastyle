@@ -1,6 +1,7 @@
 
 
 type Description = {
+    category: "hero"|"element"|"section"|"footer",
     className: string,
     description: string,
     example : string,
@@ -15,18 +16,18 @@ type Modifiers = {
 
 export class __JodaDescriptionManager {
 
-    public addClass(className: string, description: string, example : string, modifiers: Modifiers[]) {
+    public addClass(category: "hero"|"element"|"section"|"footer", className: string, description: string, example : string, modifiers: Modifiers[]) {
         if (window["jodastyle"] === undefined) {
             window["jodastyle"] = {};
         }
         if (window["jodastyle"]["descriptions"] === undefined) {
             window["jodastyle"]["descriptions"] = [];
         }
-        window["jodastyle"]["descriptions"].push({className, description, example, modifiers});
+        window["jodastyle"]["descriptions"].push({category, className, description, example, modifiers});
     }
 
 
-    get data() {
+    get data() : Description[] {
         return window["jodastyle"]["descriptions"];
     }
 
