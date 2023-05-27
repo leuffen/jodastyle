@@ -45,12 +45,16 @@ export class Jodasplit {
         let lastLayer = 1;
         this.#target.append(this.#currentParent);
         Array.from(source.children).forEach((child : Element) => {
-
+            if (child instanceof HTMLElement && child.matches("footer")) {
+                // Just copy node
+                this.#target.appendChild(child);
+                return;
+            }
             if (child instanceof HTMLElement && child.matches("h1, h2, h3, h4, h5, h6, h7, h8, h9, hr")) {
                 let layer = 1;
                 let tag = "div";
 
-                if (child.matches("h1, h2")) {
+                if (child.matches("h1,h2")) {
                     layer = lastLayer = 1;
                     tag = "section";
                 } else if (child.matches("h3, h4, h5, h6, h7, h8, h9")) {

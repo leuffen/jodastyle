@@ -62,7 +62,9 @@ export function splitChildrenBySelector(element : HTMLElement, splitBySelctor : 
         if (child.matches(splitBySelctor)) {
             ret.push(document.createDocumentFragment());
         }
-        ret[ret.length - 1].append(child);
+        if (ret.length > 0) {
+            ret[ret.length - 1].append(child);
+        }
     });
     return ret;
 }

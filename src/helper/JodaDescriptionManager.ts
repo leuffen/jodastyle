@@ -1,11 +1,17 @@
 
 
 type Description = {
-    category: "hero"|"element"|"section"|"footer",
+    category: "page"|"hero"|"element"|"section"|"footer",
     className: string,
     description: string,
     example : string,
     modifiers: Modifiers[]
+    config: Config
+}
+
+interface Config  {
+    bodyClass?: string;
+    parseMarkdown?: boolean;
 }
 
 type Modifiers = {
@@ -16,14 +22,14 @@ type Modifiers = {
 
 export class __JodaDescriptionManager {
 
-    public addClass(category: "hero"|"element"|"section"|"footer", className: string, description: string, example : string, modifiers: Modifiers[]) {
+    public addClass(category: "page"|"hero"|"element"|"section"|"footer", className: string, description: string, example : string, modifiers: Modifiers[], config: Config = {parseMarkdown: true}) {
         if (window["jodastyle"] === undefined) {
             window["jodastyle"] = {};
         }
         if (window["jodastyle"]["descriptions"] === undefined) {
             window["jodastyle"]["descriptions"] = [];
         }
-        window["jodastyle"]["descriptions"].push({category, className, description, example, modifiers});
+        window["jodastyle"]["descriptions"].push({category, className, description, example, modifiers, config});
     }
 
 
