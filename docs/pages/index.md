@@ -1,26 +1,83 @@
 ---
-layout: default
+layout: article
 permalink: /
+title: Home
 ---
 
 
 
 
-# Willkommen in der Praxis Dr. med. Yvonne Fuchs
+# JodaStyle Header 1
 
-![](https://cdn.leuffen.de//leu-stock/v/54/992x661/AdobeStock_349906385.jpeg){: .mask}
-
-![](/assets/ani.svg)
-
-
-Welcome stuff of title section
+JodaStyle will 
 
 
 
 
-## Unsere Leistungen
+## Split Sections
 
-Some TExt
+JodaStyle will split flat h1,h2,h3 Sections into a tree-like dom structure.
+
+
+### Original
+{: .columnize}
+
+```
+Pre Text
+
+# Section 1
+
+Section content
+
+## SubSection1.1
+
+Section Content
+
+### SubSubSection1.1.1
+
+Section Content
+
+### SubSubSection1.1.1
+
+Section Content
+
+## SubSection1.1
+
+Section Content
+
+```
+{: #source}
+
+### After Split
+{: .columnize}
+
+
+
+<div class="debug"><div class="joda-visualize">&lt;div  class=""&gt;</div><section class="section-h1pre"><div class="joda-visualize">&lt;section  class="section-h1pre"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><p>Pre Text<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div></section><section class="section-h1" style=""><div class="joda-visualize">&lt;section  class="section-h1"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><h1 id="section-1">Section 1<div class="joda-visualize">&lt;h1  class=""&gt;</div></h1><p>Section content<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div></section><section class="section-h2" style=""><div class="joda-visualize">&lt;section  class="section-h2"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><h2 id="subsection11">SubSection1.1<div class="joda-visualize">&lt;h2  class=""&gt;</div></h2><p>Section Content<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div><div class="section-h3" style=""><div class="joda-visualize">&lt;div  class="section-h3"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><h3 id="subsubsection111">SubSubSection1.1.1<div class="joda-visualize">&lt;h3  class=""&gt;</div></h3><p>Section Content<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div></div><div class="section-h3" style=""><div class="joda-visualize">&lt;div  class="section-h3"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><h3 id="subsubsection111-1">SubSubSection1.1.1<div class="joda-visualize">&lt;h3  class=""&gt;</div></h3><p>Section Content<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div></div></section><section class="section-h2" style=""><div class="joda-visualize">&lt;section  class="section-h2"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><h2 id="subsection11-1">SubSection1.1<div class="joda-visualize">&lt;h2  class=""&gt;</div></h2><p>Section Content<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div><div class="children"><div class="joda-visualize">&lt;div  class="children"&gt;</div></div></section></div>
+
+
+
+## CSSPlus
+
+Modify DOM Structure with CSSPlus.
+
+
+| Command                              | Description                                                                                       |
+|--------------------------------------|---------------------------------------------------------------------------------------------------|
+| `--joda-wrap: @class1;`              | Wrap the element in a div with class1                                                             |
+| `--joda-group: @row;`                | Wrap element and siblings with same wrap-row into this element                                    |
+| `--joda-class: @col;`                | Add a Class to this element                                                                       |
+| `--roda-replace-by: @class;`         | Replace the entire Element with this element                                                      |
+| `--joda-use: method(<json layout>);` | Wrap this element with interactive Wrapper function. It will evaluate `--layout-<name>` Variables |
+
+
+### SubSection2.2
+
+Some Content
+
+## Section 3
+
+
 
 
 ---

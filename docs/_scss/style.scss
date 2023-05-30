@@ -1,0 +1,20 @@
+@import "../../style_embed";
+@import "../../debug";
+
+.columnize {
+    --joda-group: @row;
+    --joda-class: col;
+}
+
+table {
+    --joda-class: table;
+}
+
+joda-content h1, joda-content h2, joda-content h3 {
+    padding-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    border-bottom: 1px solid #ccc;
+}

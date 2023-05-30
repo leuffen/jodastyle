@@ -13,6 +13,8 @@ export class Jodasplit {
     #parents = [this.#target];
     #currentParent : HTMLElement = ka_create_element("section", {class: "section-h1pre"})
 
+    #currentContent : HTMLElement = ka_create_element("div", {class: "content"}, [], this.#currentParent);
+    #currentChildren: HTMLElement = ka_create_element("div", {class: "children"}, [], this.#currentParent);
 
     constructor(public logger : Logger) {
     }
@@ -32,12 +34,23 @@ export class Jodasplit {
         tagName = tagName.toLowerCase();
         let curParent = this.findParentElement(layer)
         //console.log("createNewElement", tagName, curParent, this.#parents);
+        if (this.#currentContent.children.length === 0) {
+            this.#currentContent.remove();
+        }
+        if (this.#currentChildren.children.length === 0) {
+            this.#currentChildren.remove();
+        }
+        if (this.#currentParent.children.length === 0) {
+            this.#currentParent.remove();
+        }
         this.#currentParent =  ka_create_element(tag, {class: "section-" + tagName});
         while (this.#parents.length < layer) {
             this.#parents.push(undefined as any);
         }
         this.#parents.push(this.#currentParent as any);
         curParent.appendChild(this.#currentParent);
+        this.#currentContent = ka_create_element("div", {class: "content"}, [], this.#currentParent);
+        this.#currentChildren = ka_create_element("div", {class: "children"}, [], this.#currentParent);
         return this.#currentParent;
     }
 
@@ -69,7 +82,7 @@ export class Jodasplit {
                 e.setAttribute("style", child.getAttribute("style") || "");
                 e.classList.add(...child.classList as any);
             }
-            this.#currentParent.appendChild(child);
+            this.#currentContent.appendChild(child);
         });
         return this.#target;
     }
