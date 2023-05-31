@@ -25,23 +25,81 @@ JodaStyle will split flat h1,h2,h3 Sections into a tree-like dom structure.
 ```
 Pre Text
 
+
+
+
+
+
+
+
+
+
+
 # Section 1
 
 Section content
 
-## SubSection1.1
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Section 2
 
 Section Content
 
-### SubSubSection1.1.1
+
+
+
+
+
+
+
+
+### SubSection1.1.1
 
 Section Content
 
-### SubSubSection1.1.1
+
+
+
+
+
+
+
+
+
+
+
+
+
+### SubSection1.1.1
 
 Section Content
 
-## SubSection1.1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Section1.1
 
 Section Content
 
@@ -53,8 +111,7 @@ Section Content
 
 
 
-<div class="debug"><div class="joda-visualize">&lt;div  class=""&gt;</div><section class="section-h1pre"><div class="joda-visualize">&lt;section  class="section-h1pre"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><p>Pre Text<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div></section><section class="section-h1" style=""><div class="joda-visualize">&lt;section  class="section-h1"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><h1 id="section-1">Section 1<div class="joda-visualize">&lt;h1  class=""&gt;</div></h1><p>Section content<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div></section><section class="section-h2" style=""><div class="joda-visualize">&lt;section  class="section-h2"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><h2 id="subsection11">SubSection1.1<div class="joda-visualize">&lt;h2  class=""&gt;</div></h2><p>Section Content<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div><div class="section-h3" style=""><div class="joda-visualize">&lt;div  class="section-h3"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><h3 id="subsubsection111">SubSubSection1.1.1<div class="joda-visualize">&lt;h3  class=""&gt;</div></h3><p>Section Content<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div></div><div class="section-h3" style=""><div class="joda-visualize">&lt;div  class="section-h3"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><h3 id="subsubsection111-1">SubSubSection1.1.1<div class="joda-visualize">&lt;h3  class=""&gt;</div></h3><p>Section Content<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div></div></section><section class="section-h2" style=""><div class="joda-visualize">&lt;section  class="section-h2"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><h2 id="subsection11-1">SubSection1.1<div class="joda-visualize">&lt;h2  class=""&gt;</div></h2><p>Section Content<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div><div class="children"><div class="joda-visualize">&lt;div  class="children"&gt;</div></div></section></div>
-
+<div class="debug"><div class="joda-visualize">&lt;div  class=""&gt;</div><section class="section-h1pre"><div class="joda-visualize">&lt;section  class="section-h1pre"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><p>Pre Text<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div></section><section class="section-h1" style=""><div class="joda-visualize">&lt;section  class="section-h1"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><h1 id="section-1">Section 1<div class="joda-visualize">&lt;h1  class=""&gt;</div></h1><p>Section content<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div></section><section class="section-h2" style=""><div class="joda-visualize">&lt;section  class="section-h2"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><h2 id="subsection11">SubSection1.1<div class="joda-visualize">&lt;h2  class=""&gt;</div></h2><p>Section Content<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div><div class="children"><div class="joda-visualize">&lt;div  class="children"&gt;</div><div class="section-h3" style=""><div class="joda-visualize">&lt;div  class="section-h3"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><h3 id="subsubsection111">SubSubSection1.1.1<div class="joda-visualize">&lt;h3  class=""&gt;</div></h3><p>Section Content<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div></div><div class="section-h3" style=""><div class="joda-visualize">&lt;div  class="section-h3"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><h3 id="subsubsection111-1">SubSubSection1.1.1<div class="joda-visualize">&lt;h3  class=""&gt;</div></h3><p>Section Content<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div></div></div></section><section class="section-h2" style=""><div class="joda-visualize">&lt;section  class="section-h2"&gt;</div><div class="content"><div class="joda-visualize">&lt;div  class="content"&gt;</div><h2 id="subsection11-1">SubSection1.1<div class="joda-visualize">&lt;h2  class=""&gt;</div></h2><p>Section Content<div class="joda-visualize">&lt;p  class=""&gt;</div></p></div></section></div>
 
 
 ## CSSPlus
@@ -71,38 +128,7 @@ Modify DOM Structure with CSSPlus.
 | `--joda-use: method(<json layout>);` | Wrap this element with interactive Wrapper function. It will evaluate `--layout-<name>` Variables |
 
 
-### SubSection2.2
-
-Some Content
-
-## Section 3
 
 
 
-
----
-{: .row}
-
-### Leistung A
-{: .col-12}
-
-aa
-
-### Leistung B
-aaa
-### Leistung C
-aaa
-
-## Über mich
-
-Some Text 2
-
-## Wurst und Bohnen
-
-Some Text 3
-
-
-## Unsere Leistungen
-
-Some TExt
 
