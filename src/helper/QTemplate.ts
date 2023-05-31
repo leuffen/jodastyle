@@ -70,6 +70,22 @@ export class QTemplate {
     }
 
     /**
+     * Pick elements by selector and append them to the selected element
+     *
+     * @param source
+     * @param selector
+     */
+    public pick(source : HTMLElement, selector : string, modifier : (e : HTMLElement) => HTMLElement = null) : this {
+        Array.from(source.querySelectorAll(selector)).forEach((e: HTMLElement) => {
+            if (modifier !== null) {
+                e = modifier(e);
+            }
+            this.selected.append(e);
+        });
+        return this;
+    }
+
+    /**
      * Select and return own wrapper
      *
      * @param data_ref

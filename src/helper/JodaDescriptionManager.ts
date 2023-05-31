@@ -10,7 +10,7 @@ type Description = {
 }
 
 interface Config  {
-    bodyClass?: string;
+    bodyClasses?: string[];
     parseMarkdown?: boolean;
 }
 
@@ -22,7 +22,13 @@ type Modifiers = {
 
 export class __JodaDescriptionManager {
 
-    public addClass(category: "page"|"hero"|"element"|"section"|"footer", className: string, description: string, example : string, modifiers: Modifiers[], config: Config = {parseMarkdown: true}) {
+    public addClass(category: "page"|"hero"|"element"|"section"|"footer", className: string, description: string, example : string, modifiers: Modifiers[], config: Config = {}) {
+        let defaultConfig = {
+            bodyClasses: [],
+            parseMarkdown: true
+        }
+        config = {...defaultConfig, ...config};
+
         if (window["jodastyle"] === undefined) {
             window["jodastyle"] = {};
         }

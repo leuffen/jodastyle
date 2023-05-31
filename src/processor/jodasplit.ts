@@ -66,6 +66,7 @@ export class Jodasplit {
                 }
 
                 let e = this.createNewElement(child.tagName.toLowerCase(), layer, tag);
+
                 e.setAttribute("style", child.getAttribute("style") || "");
                 e.classList.add(...child.classList as any);
             }
