@@ -4,6 +4,7 @@ import {Jodastyle} from "../processor/jodastyle";
 import {getCurrentBreakpoint, Jodaresponsive} from "../processor/jodaresponsive";
 import {Logger} from "../helper/logger";
 import {JodaImageProc} from "../processor/jodaimageproc";
+import {Jodavisualize} from "../processor/jodavisualize";
 
 
 function getCSSRule(ruleName : string) : CSSStyleRule {
@@ -82,6 +83,12 @@ export class JodaContentElement extends HTMLElement {
 
         jodaresponsive.process(this.#outputDiv as HTMLElement);
 
+        // For documentation: Add Class and Tag-Names
+        if(this.hasAttribute("visualize")) {
+            logger.log("Adding class and tag names");
+            (new Jodavisualize()).process(this.#outputDiv as HTMLElement);
+        }
+
         await ka_sleep(1);
         this.classList.add("loaded");
 
@@ -104,4 +111,8 @@ export class JodaContentElement extends HTMLElement {
 
 
 
+    public setContent(content: string) {
+        this.innerHTML = content;
+        this.connectedCallback()
+    }
 }

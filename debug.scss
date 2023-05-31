@@ -1,0 +1,32 @@
+
+
+.debug {
+  --joda-init: true;
+
+  * {
+    position: relative;
+    border: 2px solid red;
+    margin: 20px;
+    padding: 10px
+  }
+  .joda-visualize {
+     position: absolute;
+     top: 0;
+     left: 0;
+     background-color: red;
+     color: white;
+     font-family: monospace;
+     font-weight: bold;
+     font-size: 12px;
+     padding: 0;
+     margin: 0;
+     height: 12px;
+     line-height: 10px;
+     border: 0;
+   }
+
+}
+
+
+
+

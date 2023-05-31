@@ -12,7 +12,7 @@
     "/dist",
     "/src"
   ],
-  "workspaces--": [
+  "workspaces": [
     "workspaces/*"
   ],
   "author": "",

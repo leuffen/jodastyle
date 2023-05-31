@@ -1,40 +1,53 @@
-/*!******************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js!./src/demo/style.scss ***!
-  \******************************************************************************************************************************************/
-@charset "UTF-8";
-tt-content {
-  /* indicates the stylesheet is loaded */
-  --joda-init: 1;
-}
-tt-content.debug * {
-  border: 1px solid red;
-  margin-left: 10px;
-  padding: 5px;
+/*!********************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js!./docs/_scss/style.scss ***!
+  \********************************************************************************************************************************************/
+joda-content {
+  display: none;
 }
 
-img {
-  --joda-wrap: "@image";
-  aspect-ratio: 1;
-  max-width: 100px;
+joda-content.loaded {
+  display: block;
 }
 
-.mask {
-  --mask-image: url(/assets/morphing.svg);
-  mask-mode: alpha;
-  mask-size: contain;
-  mask-repeat: no-repeat;
+.debug {
+  --joda-init: true;
+}
+.debug * {
+  position: relative;
+  border: 2px solid red;
+  margin: 20px;
+  padding: 10px;
+}
+.debug .joda-visualize {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: red;
+  color: white;
+  font-family: monospace;
+  font-weight: bold;
+  font-size: 12px;
+  padding: 0;
+  margin: 0;
+  height: 12px;
+  line-height: 10px;
+  border: 0;
 }
 
-.row > div {
-  --joda-class: ":: col-12 :xl: col";
+.columnize {
+  --joda-group: @row;
+  --joda-class: col;
 }
 
-.header1 {
-  --joda-tpl: wumme(asi: 1, muschi: "wurst");
+table {
+  --joda-class: table;
 }
 
-.tt-card {
-  --tjs-param-def--title: "Hier können Sie einen Titel eingeben";
-  --title: "Default Title";
-  --tjs-replace-by: "@card :: col-12 :xl: col-6 > @card-body >| Card Hello World" ;
+joda-content h1, joda-content h2, joda-content h3 {
+  padding-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  border-bottom: 1px solid #ccc;
 }
