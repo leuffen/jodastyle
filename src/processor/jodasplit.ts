@@ -11,8 +11,8 @@ interface JodaSplitConfig {
 export class Jodasplit {
     #target = document.createDocumentFragment();
     #parents = [this.#target];
-    #currentParent : HTMLElement = ka_create_element("section", {class: "section-h1pre"})
 
+    #currentParent : HTMLElement = ka_create_element("section", {class: "section-h1pre"})
     #currentContent : HTMLElement = ka_create_element("div", {class: "content"}, [], this.#currentParent);
     #currentChildren: HTMLElement = ka_create_element("div", {class: "children"}, [], this.#currentParent);
 
@@ -34,21 +34,18 @@ export class Jodasplit {
         tagName = tagName.toLowerCase();
         let curParent = this.findParentElement(layer)
         //console.log("createNewElement", tagName, curParent, this.#parents);
-        if (this.#currentContent.children.length === 0) {
-            this.#currentContent.remove();
-        }
-        if (this.#currentChildren.children.length === 0) {
-            this.#currentChildren.remove();
-        }
-        if (this.#currentParent.children.length === 0) {
-            this.#currentParent.remove();
-        }
+        let curParentChildren = curParent.childNodes[1] as HTMLElement;
+
         this.#currentParent =  ka_create_element(tag, {class: "section-" + tagName});
         while (this.#parents.length < layer) {
             this.#parents.push(undefined as any);
         }
         this.#parents.push(this.#currentParent as any);
-        curParent.appendChild(this.#currentParent);
+        if (curParent === this.#target) {
+            curParent.appendChild(this.#currentParent);
+        } else {
+            curParentChildren.append(this.#currentParent);
+        }
         this.#currentContent = ka_create_element("div", {class: "content"}, [], this.#currentParent);
         this.#currentChildren = ka_create_element("div", {class: "children"}, [], this.#currentParent);
         return this.#currentParent;
@@ -85,6 +82,21 @@ export class Jodasplit {
             }
             this.#currentContent.appendChild(child);
         });
+
+        // Remove empty content elements
+        Array.from(this.#target.querySelectorAll(".children")).forEach((child : HTMLElement) => {
+            if (child.children.length === 0) {
+                child.remove();
+            }
+        });
+
+        // Reove empty content elements
+        Array.from(this.#target.querySelectorAll(".content")).forEach((child : HTMLElement) => {
+            if (child.children.length === 0) {
+                child.remove();
+            }
+        });
+
         return this.#target;
     }
 }
