@@ -55,33 +55,36 @@ export class JodaContentElement extends HTMLElement {
 
         let jodaImage = new JodaImageProc(logger);
         await jodaImage.process(this);
+        await this.awaitStyles();
 
         this.#origContentTemplate = ka_create_element("template") as HTMLTemplateElement;
         this.#outputDiv = ka_create_element("div") as HTMLDivElement;
-        this.#origContentTemplate.innerHTML = this.innerHTML;
-        this.innerHTML = "";
-        this.appendChild(this.#origContentTemplate);
-        this.appendChild(this.#outputDiv);
+        //this.#origContentTemplate.innerHTML = this.innerHTML;
+        //this.innerHTML = "";
+        //this.appendChild(this.#origContentTemplate);
+        //this.appendChild(this.#outputDiv);
 
-        let jodaSplit = new Jodasplit(logger);
+
         let jodaresponsive = new Jodaresponsive(logger);
         let currentBreakpoint = getCurrentBreakpoint();
 
         // Split the content
-        this.#outputDiv.appendChild(jodaSplit.process(this.#origContentTemplate.content.cloneNode(true) as DocumentFragment));
+        //this.#outputDiv.append(this.#origContentTemplate.content.cloneNode(true) as DocumentFragment);
+
+
 
         // Wait for styles to load
-        await this.awaitStyles();
+
 
         // Process the content
-        for(let child of Array.from(this.#outputDiv.childNodes)) {
-            let jodaStyle = new Jodastyle(logger);
 
-            await jodaStyle.process(child as HTMLElement);
+        let jodaStyle = new Jodastyle(logger);
 
-        };
+        await jodaStyle.process(this as HTMLElement);
 
-        jodaresponsive.process(this.#outputDiv as HTMLElement);
+
+
+        jodaresponsive.process(this as HTMLElement);
 
         // For documentation: Add Class and Tag-Names
         if(this.hasAttribute("visualize")) {
@@ -93,9 +96,10 @@ export class JodaContentElement extends HTMLElement {
         this.classList.add("loaded");
 
         await ka_sleep(1);
-        if (this.hasAttribute("data-master")) {
-            document.body.classList.add("loaded");
-        }
+
+        document.body.classList.add("loaded");
+        document.querySelector("html").classList.remove("loader");
+
 
         window.addEventListener("resize", () => {
             if (currentBreakpoint === getCurrentBreakpoint()) {
@@ -103,9 +107,9 @@ export class JodaContentElement extends HTMLElement {
             }
             currentBreakpoint = getCurrentBreakpoint();
             logger.log("Breakpoint changed to " + currentBreakpoint);
-            this.#outputDiv.childNodes.forEach( (child) => {
-                jodaresponsive.process(child as HTMLElement);
-            });
+
+            jodaresponsive.process(this as HTMLElement);
+
         });
     }
 
