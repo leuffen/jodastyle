@@ -65,25 +65,16 @@ export class JodaContentElement extends HTMLElement {
         //this.appendChild(this.#outputDiv);
 
 
-        let jodaresponsive = new Jodaresponsive(logger);
-        let currentBreakpoint = getCurrentBreakpoint();
 
-        // Split the content
-        //this.#outputDiv.append(this.#origContentTemplate.content.cloneNode(true) as DocumentFragment);
-
-
-
-        // Wait for styles to load
 
 
         // Process the content
-
         let jodaStyle = new Jodastyle(logger);
-
         await jodaStyle.process(this as HTMLElement);
 
 
-
+        let jodaresponsive = new Jodaresponsive(logger);
+        let currentBreakpoint = getCurrentBreakpoint();
         jodaresponsive.process(this as HTMLElement);
 
         // For documentation: Add Class and Tag-Names

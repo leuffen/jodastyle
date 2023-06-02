@@ -31,6 +31,11 @@ export async function await_property(object : object, property : string[] | stri
 }
 
 
+export function wrapElement(element : HTMLElement, wrapper : HTMLElement) {
+    element.parentNode?.insertBefore(wrapper, element);
+    wrapper.appendChild(element);
+}
+
 
 export type JodaUseRenderer = {
     renderer: new() => JodaRendererInterface,

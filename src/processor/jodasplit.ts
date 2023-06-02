@@ -9,6 +9,8 @@ interface JodaSplitConfig {
 
 
 export class Jodasplit {
+
+
     #target = document.createDocumentFragment();
     #parents = [this.#target];
 

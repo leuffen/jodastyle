@@ -5,7 +5,10 @@ import {Logger} from "../helper/logger";
 
 @customElement('joda-split')
 class JodaSplit extends HTMLElement {
-
+    #ready : boolean = false;
+    get ready() {
+        return this.#ready;
+    }
     async connectedCallback() {
         let logger = new Logger("joda-split");
         await ka_sleep(1);
@@ -14,8 +17,9 @@ class JodaSplit extends HTMLElement {
         let fragment = document.createDocumentFragment();
 
 
-        fragment.append(jodaSplit.process(this));
+        fragment.append(await jodaSplit.process(this));
         this.innerHTML = "";
         this.append(fragment);
+        this.#ready = true;
     }
 }
