@@ -35,15 +35,26 @@ export class JodaContentElement extends HTMLElement {
         let index = 0;
         while(true) {
             index++;
-            if (getComputedStyle(this).getPropertyValue("--joda-init").indexOf("true") !== -1) {
+            let initValue = getComputedStyle(this).getPropertyValue("--joda-init")
+            if (initValue.indexOf("true") !== -1) {
                 break;
             }
             if (index > 100) {
                 index = 0;
-                console.warn("Still waiting for --joda-init: true", this, "current value:", getComputedStyle(this).getPropertyValue("--joda-init"));
+                console.warn("Still waiting for --joda-init: true", this, "current value:", initValue, "on url", window.location.href);
             }
             await ka_sleep(50 + index);
         }
+    }
+
+    protected async setLoaded() {
+        await ka_sleep(1);
+        this.classList.add("loaded");
+
+        await ka_sleep(1);
+
+        document.body.classList.add("loaded");
+        document.querySelector("html").classList.remove("loader");
     }
 
 
@@ -83,13 +94,7 @@ export class JodaContentElement extends HTMLElement {
             (new Jodavisualize()).process(this.#outputDiv as HTMLElement);
         }
 
-        await ka_sleep(1);
-        this.classList.add("loaded");
-
-        await ka_sleep(1);
-
-        document.body.classList.add("loaded");
-        document.querySelector("html").classList.remove("loader");
+        this.setLoaded();
 
 
         window.addEventListener("resize", () => {
