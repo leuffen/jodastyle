@@ -84,7 +84,7 @@ export class Jodasplit {
                     tag = "div";
                 }
 
-                console.log("layer is", layer, lastLayer, child.tagName, child);
+                //console.log("layer is", layer, lastLayer, child.tagName, child);
                 let e = this.createNewElement(child.tagName.toLowerCase(), layer, tag);
 
 
