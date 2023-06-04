@@ -53,7 +53,7 @@ class ResponsiveClass {
                 break;
             }
         }
-        if (isDefault) {
+        if (isDefault && this.default !== null) {
             ret.push(...this.default);
         }
         ret = ret.filter((item) => item !== "");
