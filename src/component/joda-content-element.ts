@@ -48,10 +48,10 @@ export class JodaContentElement extends HTMLElement {
     }
 
     protected async setLoaded() {
-        await ka_sleep(1);
+        await ka_sleep(10);
         this.classList.add("loaded");
 
-        await ka_sleep(1);
+        await ka_sleep(100);
 
         document.body.classList.add("loaded");
         document.querySelector("html").classList.remove("loader");

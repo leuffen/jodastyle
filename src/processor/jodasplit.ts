@@ -66,7 +66,7 @@ export class Jodasplit {
                 let layer = 1;
                 let tag = "div";
 
-                if (child.matches("h1,h2")) {
+                if (child.matches("h1,h2,.section-h2")) {
                     layer = lastLayer = 1;
                     tag = "section";
                 } else if (child.matches("h3, h4, h5, h6, h7, h8, h9")) {
@@ -79,10 +79,14 @@ export class Jodasplit {
 
                 let e = this.createNewElement(child.tagName.toLowerCase(), layer, tag);
 
+
                 e.setAttribute("style", child.getAttribute("style") || "");
                 e.classList.add(...child.classList as any);
+                child.setAttribute("orig-class", child.getAttribute("class") || "");
+                child.setAttribute("class", "");
             }
-            this.#currentContent.appendChild(child);
+            if (child.tagName !== "HR")
+                this.#currentContent.appendChild(child);
         });
 
         // Remove empty content elements
