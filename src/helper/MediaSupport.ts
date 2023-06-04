@@ -10,6 +10,7 @@ export class MediaSupport {
     public jpg : boolean = true
     public jpeg : boolean = true
     public gif : boolean = true
+    public png : boolean = true
 
 
     public valid : boolean = false;
