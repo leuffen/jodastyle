@@ -12,7 +12,9 @@ title: Home
 JodaStyle will 
 
 
+## JodaShorts
 
+Wrap Markdown content like `[i .bi bi-pen]` in `<i class="bi bi-pen"></i>`.
 
 ## Split Sections
 
