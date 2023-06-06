@@ -2,6 +2,8 @@ import {createElementTree} from "../helper/ka-quick-template";
 import {await_property, getCleanVariableValue, JodaUseRenderer} from "../helper/functions";
 import {Logger} from "../helper/logger";
 import {ka_eval} from "@kasimirjs/embed";
+import {JodaErrorElement} from "../helper/JodaErrorElement";
+import {JodaElementException} from "../helper/JodaElementException";
 
 type Commands = {
     [command: string]: ((value : string, target : HTMLDivElement, element : HTMLElement, logger : Logger) => HTMLElement|Promise<HTMLElement>);
@@ -26,13 +28,41 @@ jodaStyleCommands["--joda-replace-by"] = (value : string, target, element : HTML
 
 jodaStyleCommands["--joda-wrap"] = (value : string, target, element : HTMLElement, logger : Logger) => {
     let parent = element.parentElement;
-    let ret = createElementTree(value)
 
-    parent.replaceChild(ret.start, element);
+    if (value.startsWith("#")) {
+        let tpl = document.querySelector(value) as HTMLTemplateElement;
+        if ( ! tpl) {
+            throw new JodaElementException(`Template ${value} not found`, element);
+        }
+        let newElement = tpl.content.cloneNode(true) as HTMLElement;
+        let slot = newElement.querySelector("slot");
+        parent.replaceChild(newElement, element);
 
-    ret.leaf.append(element);
-    return element;
+        if (slot !== null) {
+            slot.append(element);
+        }
+        return element;
+
+    } else {
+        let ret = createElementTree(value)
+
+        parent.replaceChild(ret.start, element);
+
+        ret.leaf.append(element);
+        return element;
+    }
 }
+
+
+jodaStyleCommands["--joda-unwrap"] = (value : string, target, element : HTMLElement, logger : Logger) => {
+    let parent = element.parentElement;
+    let grandParent = parent.parentElement;
+    grandParent.insertBefore(element, parent);
+    if (parent.children.length === 0) {
+        parent.remove();
+    }
+    return element;
+};
 
 
 /**

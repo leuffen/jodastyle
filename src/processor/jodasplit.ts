@@ -62,7 +62,7 @@ export class Jodasplit {
                 this.#target.appendChild(child);
                 return;
             }
-            if (child instanceof HTMLElement && child.matches("h1, h2, h3, h4, h5, h6, h7, h8, h9, .section-h2, .section-h3, .section-h4")) {
+            if (child instanceof HTMLElement && child.matches("h1, h2, h3, h4, h5, h6, h7, h8, h9, hr, .section-h2, .section-h3, .section-h4")) {
                 let layer = 1;
                 let tag = "div";
 
@@ -93,8 +93,11 @@ export class Jodasplit {
                 child.setAttribute("orig-class", child.getAttribute("class") || "");
                 child.setAttribute("class", "");
             }
-            if (child.tagName !== "HR")
-                this.#currentContent.appendChild(child);
+            if (child.tagName === "HR") {
+                child.setAttribute("orig-pre-split-class", child.getAttribute("class"));
+                child.setAttribute("class", "d-none");
+            }
+            this.#currentContent.appendChild(child);
         });
 
         // Remove empty content elements
