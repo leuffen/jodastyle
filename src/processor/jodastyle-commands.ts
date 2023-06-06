@@ -35,6 +35,15 @@ jodaStyleCommands["--joda-wrap"] = (value : string, target, element : HTMLElemen
             throw new JodaElementException(`Template ${value} not found`, element);
         }
         let newElement = tpl.content.cloneNode(true) as HTMLElement;
+
+        newElement.querySelectorAll("slot[data-select]").forEach((slot) => {
+            let select = slot.getAttribute("data-select");
+            let selected = element.querySelector(select);
+            if (selected) {
+                slot.append(selected);
+            }
+        });
+
         let slot = newElement.querySelector("slot");
         parent.replaceChild(newElement, element);
 
