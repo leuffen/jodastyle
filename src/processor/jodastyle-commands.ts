@@ -54,6 +54,16 @@ jodaStyleCommands["--joda-wrap"] = (value : string, target, element : HTMLElemen
 }
 
 
+jodaStyleCommands["--joda-container"] = (value : string, target, element : HTMLElement, logger : Logger) => {
+    let ret = createElementTree(value)
+
+    Array.from(element.children).forEach((child) => {
+        ret.leaf.append(child);
+    })
+    element.append(ret.start);
+    return element;
+};
+
 jodaStyleCommands["--joda-unwrap"] = (value : string, target, element : HTMLElement, logger : Logger) => {
     let parent = element.parentElement;
     let grandParent = parent.parentElement;
