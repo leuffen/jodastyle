@@ -139,10 +139,20 @@ Modify DOM Structure with CSSPlus.
 
 Minitemplates will replace any occurence of `[mini_tpl_name: value]` with the tempates value.
 
-### Example
+## Examples
+
+### Shorts in Markdown
 
 ```
 Hello World [bi: bi-emoji-smile]
 ```
 
+### Grouping elements with CSSPlus
 
+Create a wrapper Element `<div class="row">` around all elements with class `column`.
+
+```css
+.column {
+    --joda-group: @row;
+}
+```
