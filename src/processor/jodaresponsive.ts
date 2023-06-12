@@ -44,15 +44,16 @@ class ResponsiveClass {
         ret.push(...this.always);
         let isDefault = true;
         for (let bp of this.breakpoints) {
+            //console.log("Breakpoint", bp, this[bp], breakpoint);
             if (this[bp] !== null) {
-                ret.push(...this[bp]);
+                ret = this[bp];
                 isDefault = false;
             }
             if (bp === breakpoint) {
                 break;
             }
         }
-        if (isDefault) {
+        if (isDefault && this.default !== null) {
             ret.push(...this.default);
         }
         ret = ret.filter((item) => item !== "");
@@ -99,6 +100,8 @@ export class Jodaresponsive {
         let responsiveClasses = parseClassStr(classes);
 
         node.setAttribute("class", "");
+
+        node.classList.add(...responsiveClasses.always.filter((item) => item !== ""));
         node.classList.add(...responsiveClasses.getClassesForBreakpoint());
 
     }

@@ -13,9 +13,11 @@ JodaStyle will
 
 [<icon: bi bi-emoji-smile>]
 
-Some ==Title==
 
-- [ ] Task 1
+## JodaShorts
+
+Wrap Markdown content like `[i .bi bi-pen]` in `<i class="bi bi-pen"></i>`.
+
 
 ## Split Sections
 
@@ -125,11 +127,13 @@ Modify DOM Structure with CSSPlus.
 | Command                              | Description                                                                                       |
 |--------------------------------------|---------------------------------------------------------------------------------------------------|
 | `--joda-wrap: @class1;`              | Wrap the element in a div with class1                                                             |
+| `--joda-wrap: #id;`                  | Wrap the element in slot element of template with id                                              |
+| `--joda-container: @class;`          | Create Contaier for all Sub-Elements                                                              |
 | `--joda-group: @row;`                | Wrap element and siblings with same wrap-row into this element                                    |
 | `--joda-class: @col;`                | Add a Class to this element                                                                       |
 | `--roda-replace-by: @class;`         | Replace the entire Element with this element                                                      |
 | `--joda-use: method(<json layout>);` | Wrap this element with interactive Wrapper function. It will evaluate `--layout-<name>` Variables |
-
+| `--joda-unwrap: true;`               | Remove this element from the DOM                                                                  |
 
 ## Minitemplate
 

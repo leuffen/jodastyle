@@ -9,6 +9,8 @@ interface JodaSplitConfig {
 
 
 export class Jodasplit {
+
+
     #target = document.createDocumentFragment();
     #parents = [this.#target];
 
@@ -60,25 +62,40 @@ export class Jodasplit {
                 this.#target.appendChild(child);
                 return;
             }
-            if (child instanceof HTMLElement && child.matches("h1, h2, h3, h4, h5, h6, h7, h8, h9, hr")) {
+            if (child instanceof HTMLElement && child.matches("h1, h2, h3, h4, h5, h6, h7, h8, h9, hr, .section-h2, .section-h3, .section-h4")) {
                 let layer = 1;
                 let tag = "div";
 
-                if (child.matches("h1,h2")) {
+                if (child.matches("h1,h2,.section-h2")) {
                     layer = lastLayer = 1;
                     tag = "section";
-                } else if (child.matches("h3, h4, h5, h6, h7, h8, h9")) {
-                    layer = lastLayer = parseInt(child.tagName.substr(1)) * 2; // Allow HR in between
+                } else if (child.matches("h3, h4, h5, h6, h7, h8, h9, .section-h3, .section-h4")) {
+                    if (child.matches(".section-h3")) {
+                        layer = lastLayer = 6;
+                    } else if( child.matches(".section-h4")) {
+                        layer = lastLayer = 8;
+                    } else {
+                        layer = lastLayer = parseInt(child.tagName.substr(1)) * 2; // Allow HR in between
+                    }
+
                     tag = "div";
                 } else if (child.matches("hr")) {
                     layer = lastLayer + 1; // hr crates subelement of the last element
                     tag = "div";
                 }
 
+                //console.log("layer is", layer, lastLayer, child.tagName, child);
                 let e = this.createNewElement(child.tagName.toLowerCase(), layer, tag);
+
 
                 e.setAttribute("style", child.getAttribute("style") || "");
                 e.classList.add(...child.classList as any);
+                child.setAttribute("orig-class", child.getAttribute("class") || "");
+                child.setAttribute("class", "");
+            }
+            if (child.tagName === "HR") {
+                child.setAttribute("orig-pre-split-class", child.getAttribute("class"));
+                child.setAttribute("class", "d-none");
             }
             this.#currentContent.appendChild(child);
         });

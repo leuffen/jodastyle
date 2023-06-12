@@ -35,15 +35,26 @@ export class JodaContentElement extends HTMLElement {
         let index = 0;
         while(true) {
             index++;
-            if (getComputedStyle(this).getPropertyValue("--joda-init").indexOf("true") !== -1) {
+            let initValue = getComputedStyle(this).getPropertyValue("--joda-init")
+            if (initValue.indexOf("true") !== -1) {
                 break;
             }
             if (index > 100) {
                 index = 0;
-                console.warn("Still waiting for --joda-init: true", this, "current value:", getComputedStyle(this).getPropertyValue("--joda-init"));
+                console.warn("Still waiting for --joda-init: true", this, "current value:", initValue, "on url", window.location.href);
             }
             await ka_sleep(50 + index);
         }
+    }
+
+    protected async setLoaded() {
+        await ka_sleep(10);
+        this.classList.add("loaded");
+
+        await ka_sleep(100);
+
+        document.body.classList.add("loaded");
+        document.querySelector("html").classList.remove("loader");
     }
 
 
@@ -55,33 +66,27 @@ export class JodaContentElement extends HTMLElement {
 
         let jodaImage = new JodaImageProc(logger);
         await jodaImage.process(this);
+        await this.awaitStyles();
 
         this.#origContentTemplate = ka_create_element("template") as HTMLTemplateElement;
         this.#outputDiv = ka_create_element("div") as HTMLDivElement;
-        this.#origContentTemplate.innerHTML = this.innerHTML;
-        this.innerHTML = "";
-        this.appendChild(this.#origContentTemplate);
-        this.appendChild(this.#outputDiv);
+        //this.#origContentTemplate.innerHTML = this.innerHTML;
+        //this.innerHTML = "";
+        //this.appendChild(this.#origContentTemplate);
+        //this.appendChild(this.#outputDiv);
 
-        let jodaSplit = new Jodasplit(logger);
-        let jodaresponsive = new Jodaresponsive(logger);
-        let currentBreakpoint = getCurrentBreakpoint();
 
-        // Split the content
-        this.#outputDiv.appendChild(jodaSplit.process(this.#origContentTemplate.content.cloneNode(true) as DocumentFragment));
 
-        // Wait for styles to load
-        await this.awaitStyles();
+
 
         // Process the content
-        for(let child of Array.from(this.#outputDiv.childNodes)) {
-            let jodaStyle = new Jodastyle(logger);
+        let jodaStyle = new Jodastyle(logger);
+        await jodaStyle.process(this as HTMLElement);
 
-            await jodaStyle.process(child as HTMLElement);
 
-        };
-
-        jodaresponsive.process(this.#outputDiv as HTMLElement);
+        let jodaresponsive = new Jodaresponsive(logger);
+        let currentBreakpoint = getCurrentBreakpoint();
+        jodaresponsive.process(this as HTMLElement);
 
         // For documentation: Add Class and Tag-Names
         if(this.hasAttribute("visualize")) {
@@ -89,13 +94,8 @@ export class JodaContentElement extends HTMLElement {
             (new Jodavisualize()).process(this.#outputDiv as HTMLElement);
         }
 
-        await ka_sleep(1);
-        this.classList.add("loaded");
+        this.setLoaded();
 
-        await ka_sleep(1);
-        if (this.hasAttribute("data-master")) {
-            document.body.classList.add("loaded");
-        }
 
         window.addEventListener("resize", () => {
             if (currentBreakpoint === getCurrentBreakpoint()) {
@@ -103,9 +103,9 @@ export class JodaContentElement extends HTMLElement {
             }
             currentBreakpoint = getCurrentBreakpoint();
             logger.log("Breakpoint changed to " + currentBreakpoint);
-            this.#outputDiv.childNodes.forEach( (child) => {
-                jodaresponsive.process(child as HTMLElement);
-            });
+
+            jodaresponsive.process(this as HTMLElement);
+
         });
     }
 
