@@ -57,7 +57,7 @@ export class JodaImageProc {
     public async process(node : HTMLElement) {
         let processor = new LeuCDNImageProc();
         let mediaSupport = await getMediaSupport();
-        for (let imgNode of node.querySelectorAll("img[src]")) {
+        for (let imgNode of node.querySelectorAll("img[src]") as any) {
             imageIndex++;
             let src = imgNode.getAttribute("src");
             imgNode.setAttribute("data-src-orig", src);

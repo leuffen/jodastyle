@@ -53,7 +53,7 @@ export class Jodasplit {
         return this.#currentParent;
     }
 
-    process (source : DocumentFragment) : DocumentFragment {
+    process (source : DocumentFragment | HTMLElement) : DocumentFragment {
         let lastLayer = 1;
         this.#target.append(this.#currentParent);
         Array.from(source.children).forEach((child : Element) => {

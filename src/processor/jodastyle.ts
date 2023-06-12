@@ -14,7 +14,7 @@ export class Jodastyle {
 
     public async process(node : HTMLElement) {
         for (let child of Array.from(node.getElementsByTagName("joda-split"))) {
-            while (child.ready !== true) {
+            while (child["ready"] !== true) {
                 await ka_sleep(5);
             }
         }
