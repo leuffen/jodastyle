@@ -17,7 +17,7 @@
   ],
   "author": "",
   "dependencies": {
-    "@kasimirjs/embed": "^1.0.20"
+    "@kasimirjs/embed": "^1.1"
   },
   "devDependencies": {
     "dart-sass": "^1.25.0",
