@@ -11,10 +11,13 @@ title: Home
 
 JodaStyle will 
 
+[<icon: bi bi-emoji-smile>]
+
 
 ## JodaShorts
 
 Wrap Markdown content like `[i .bi bi-pen]` in `<i class="bi bi-pen"></i>`.
+
 
 ## Split Sections
 
@@ -132,7 +135,24 @@ Modify DOM Structure with CSSPlus.
 | `--joda-use: method(<json layout>);` | Wrap this element with interactive Wrapper function. It will evaluate `--layout-<name>` Variables |
 | `--joda-unwrap: true;`               | Remove this element from the DOM                                                                  |
 
+## Minitemplate
 
+Minitemplates will replace any occurence of `[mini_tpl_name: value]` with the tempates value.
 
+## Examples
 
+### Shorts in Markdown
 
+```
+Hello World [bi: bi-emoji-smile]
+```
+
+### Grouping elements with CSSPlus
+
+Create a wrapper Element `<div class="row">` around all elements with class `column`.
+
+```css
+.column {
+    --joda-group: @row;
+}
+```
