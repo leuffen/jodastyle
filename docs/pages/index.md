@@ -11,8 +11,11 @@ title: Home
 
 JodaStyle will 
 
+[<icon: bi bi-emoji-smile>]
 
+Some ==Title==
 
+- [ ] Task 1
 
 ## Split Sections
 
@@ -128,7 +131,14 @@ Modify DOM Structure with CSSPlus.
 | `--joda-use: method(<json layout>);` | Wrap this element with interactive Wrapper function. It will evaluate `--layout-<name>` Variables |
 
 
+## Minitemplate
 
+Minitemplates will replace any occurence of `[mini_tpl_name: value]` with the tempates value.
 
+### Example
+
+```
+Hello World [bi: bi-emoji-smile]
+```
 
 
