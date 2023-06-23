@@ -1,6 +1,7 @@
 import {ka_sleep} from "@kasimirjs/embed";
 import {JodaRendererInterface} from "./JodaRenderer";
 import {DefaultLayout} from "../types/DefaultLayout";
+import {JodaElementException} from "./JodaElementException";
 
 
 export async function await_property(object : object, property : string[] | string, wait : number = 10) {
@@ -78,3 +79,64 @@ export function getCleanVariableValue(styleValue : string) : string {
     return styleValue.trim().replace(/^["']/g, '').replace(/["']$/, '').trim()
 }
 
+
+/**
+ * Parse config string formattes as key-value pairs like this: key1: value1; key2: value2; ... into an object.
+ *
+ * @param input String representing key-value pair separated by colon and each line separated by semicolon
+ * @returns Object containing key-value pairs from string
+ */
+export function parseConfigString(input: string): {[key: string]: string} {
+    // Check if input is null or undefined
+    if (input == null) {
+        return {};
+    }
+
+    // Split input string and filter invalid lines
+    const obj: {[key: string]: string} = {};
+    const lines = input.trim().split(';');
+    for (let line of lines) {
+        const parts = line.trim().split(':');
+        if (parts.length == 2) {
+            obj[parts[0].trim()] = parts[1].trim();
+        }
+    }
+
+    return obj;
+}
+
+
+
+export function getTemplateFilledWithContent(templateSelector : string, content : HTMLElement) : DocumentFragment {
+    let template = document.querySelector<HTMLTemplateElement>(templateSelector);
+    if (template === null) {
+        throw new JodaElementException("Template not found: " + templateSelector);
+    }
+    let clone = document.importNode(template.content, true);
+    clone.querySelectorAll("slot[data-select]").forEach((slot) => {
+        let select = slot.getAttribute("data-select");
+        let selected = Array.from(content.querySelectorAll(select));
+        if (selected.length === 0) {
+            console.warn("No element found for selector: " + select + " in template: " + templateSelector + " for slot: " + slot);
+            return;
+        }
+        if (slot.hasAttribute("data-replace") && selected) {
+            slot.replaceWith(...selected);
+        } else if(selected) {
+            slot.append(...selected);
+        }
+    });
+
+    // Select <slot> element with no data-select attribute
+    let slot = clone.querySelector("slot:not([data-select])");
+
+    if (slot !== null && slot.hasAttribute("data-replace")) {
+        slot.replaceWith(...content.children);
+    } else if (slot !== null) {
+        slot.append(...content.children);
+    } else {
+        content.remove();
+    }
+
+    return clone;
+}

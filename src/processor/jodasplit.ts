@@ -1,5 +1,6 @@
 import {ka_create_element} from "@kasimirjs/embed";
 import {Logger} from "../helper/logger";
+import {LayoutProcessor} from "./LayoutProcessor";
 
 
 interface JodaSplitConfig {
@@ -56,6 +57,9 @@ export class Jodasplit {
     process (source : DocumentFragment | HTMLElement) : DocumentFragment {
         let lastLayer = 1;
         this.#target.append(this.#currentParent);
+
+        let layoutProcessor = new LayoutProcessor(this.logger);
+
         Array.from(source.children).forEach((child : Element) => {
             if (child instanceof HTMLElement && child.matches("footer")) {
                 // Just copy node
@@ -87,16 +91,23 @@ export class Jodasplit {
                 //console.log("layer is", layer, lastLayer, child.tagName, child);
                 let e = this.createNewElement(child.tagName.toLowerCase(), layer, tag);
 
+                e.setAttribute("layout", child.getAttribute("layout") || "");
+                child.removeAttribute("layout");
 
                 e.setAttribute("style", child.getAttribute("style") || "");
+                child.removeAttribute("style");
+
                 e.classList.add(...child.classList as any);
                 child.setAttribute("orig-class", child.getAttribute("class") || "");
                 child.setAttribute("class", "");
+
+                layoutProcessor.processNode(e);
             }
             if (child.tagName === "HR") {
                 child.setAttribute("orig-pre-split-class", child.getAttribute("class"));
                 child.setAttribute("class", "d-none");
             }
+
             this.#currentContent.appendChild(child);
         });
 

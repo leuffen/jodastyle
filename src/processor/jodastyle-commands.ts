@@ -1,5 +1,10 @@
 import {createElementTree} from "../helper/ka-quick-template";
-import {await_property, getCleanVariableValue, JodaUseRenderer} from "../helper/functions";
+import {
+    await_property,
+    getCleanVariableValue,
+    getTemplateFilledWithContent,
+    JodaUseRenderer
+} from "../helper/functions";
 import {Logger} from "../helper/logger";
 import {ka_eval} from "@kasimirjs/embed";
 import {JodaErrorElement} from "../helper/JodaErrorElement";
@@ -30,26 +35,10 @@ jodaStyleCommands["--joda-wrap"] = (value : string, target, element : HTMLElemen
     let parent = element.parentElement;
 
     if (value.startsWith("#")) {
-        let tpl = document.querySelector(value) as HTMLTemplateElement;
-        if ( ! tpl) {
-            throw new JodaElementException(`Template ${value} not found`, element);
-        }
-        let newElement = tpl.content.cloneNode(true) as HTMLElement;
-
-        newElement.querySelectorAll("slot[data-select]").forEach((slot) => {
-            let select = slot.getAttribute("data-select");
-            let selected = element.querySelector(select);
-            if (selected) {
-                slot.append(selected);
-            }
-        });
-
-        let slot = newElement.querySelector("slot");
-        parent.replaceChild(newElement, element);
-
-        if (slot !== null) {
-            slot.append(element);
-        }
+        let placeholder = document.createElement("div");
+        parent.insertBefore(placeholder, element);
+        let newElement = getTemplateFilledWithContent(value, element);
+        placeholder.replaceWith(newElement);
         return element;
 
     } else {
@@ -130,6 +119,18 @@ jodaStyleCommands["--joda-class"] = (value : string, target, element : HTMLEleme
 }
 
 jodaStyleCommands["--joda-use"] = async(value : string, target, element : HTMLElement, logger : Logger) => {
+    if (value.startsWith("#")) {
+        let placeholder = document.createElement("div");
+        Array.from(element.children).forEach((child) => {
+            placeholder.append(child);
+        });
+        let newElement = getTemplateFilledWithContent(value, placeholder);
+
+        element.append(newElement);
+        return element;
+    }
+
+
     let matches = value.match(/([a-z0-9\_-]+)\s*\((.*?)\)/);
     if ( ! matches) {
         console.error("Invalid --joda-use command: ", value, "in element", element, " should be in format: commandName(arg1: value1, arg2: value2, ...)");
