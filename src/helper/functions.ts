@@ -113,6 +113,20 @@ export function getTemplateFilledWithContent(templateSelector : string, content 
         throw new JodaElementException("Template not found: " + templateSelector);
     }
     let clone = document.importNode(template.content, true);
+
+    clone.querySelectorAll("slot[data-select][data-copy]").forEach((slot) => {
+        let select = slot.getAttribute("data-select");
+        let selected = Array.from(content.querySelectorAll(select)).map((element) => element.cloneNode(true));
+        if (selected.length === 0) {
+            console.warn("No element found for selector: " + select + " in template: " + templateSelector + " for slot: " + slot);
+            return;
+        }
+        if (slot.hasAttribute("data-replace") && selected) {
+            slot.replaceWith(...selected);
+        } else if(selected) {
+            slot.append(...selected);
+        }
+    });
     clone.querySelectorAll("slot[data-select]").forEach((slot) => {
         let select = slot.getAttribute("data-select");
         let selected = Array.from(content.querySelectorAll(select));
