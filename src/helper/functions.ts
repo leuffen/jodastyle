@@ -1,7 +1,8 @@
-import {ka_sleep} from "@kasimirjs/embed";
+import {ka_sleep, template} from "@kasimirjs/embed";
 import {JodaRendererInterface} from "./JodaRenderer";
 import {DefaultLayout} from "../types/DefaultLayout";
 import {JodaElementException} from "./JodaElementException";
+import {QTemplate, template_parse} from "./QTemplate";
 
 
 export async function await_property(object : object, property : string[] | string, wait : number = 10) {
@@ -107,11 +108,26 @@ export function parseConfigString(input: string): {[key: string]: string} {
 
 
 
-export function getTemplateFilledWithContent(templateSelector : string, content : HTMLElement) : DocumentFragment {
+export function getTemplateFilledWithContent(templateSelector : string, content : HTMLElement, origElement : HTMLElement) : DocumentFragment {
     let template = document.querySelector<HTMLTemplateElement>(templateSelector);
     if (template === null) {
         throw new JodaElementException("Template not found: " + templateSelector);
     }
+
+
+    console.log("Found template: " + templateSelector, "on", origElement);
+    // Load --layout-* variables to template parser
+    let layout = {};
+    let props = getComputedStyle(origElement);
+    //console.log("props", props);
+    for(let key of props) {
+        if (key.startsWith("--layout-")) {
+            layout[key.substring(9)] = props.getPropertyValue(key);
+
+        }
+    }
+    template = template.cloneNode(true) as HTMLTemplateElement;
+    template.innerHTML =  template_parse(template.innerHTML, {layout}, content);
     let clone = document.importNode(template.content, true);
 
     clone.querySelectorAll("slot[data-select][data-copy]").forEach((slot) => {

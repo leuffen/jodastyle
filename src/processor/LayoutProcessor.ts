@@ -22,7 +22,7 @@ export class LayoutProcessor {
                 node.style.setProperty("--joda-" + key, layout[key]);
                 continue;
             }
-            node.style.setProperty("--" + key, layout[key]);
+            node.style.setProperty("--layout-" + key, layout[key]);
         }
 
         return node;

@@ -37,7 +37,7 @@ jodaStyleCommands["--joda-wrap"] = (value : string, target, element : HTMLElemen
     if (value.startsWith("#")) {
         let placeholder = document.createElement("div");
         parent.insertBefore(placeholder, element);
-        let newElement = getTemplateFilledWithContent(value, element);
+        let newElement = getTemplateFilledWithContent(value, element, element);
         placeholder.replaceWith(newElement);
         return element;
 
@@ -124,7 +124,7 @@ jodaStyleCommands["--joda-use"] = async(value : string, target, element : HTMLEl
         Array.from(element.children).forEach((child) => {
             placeholder.append(child);
         });
-        let newElement = getTemplateFilledWithContent(value, placeholder);
+        let newElement = getTemplateFilledWithContent(value, placeholder, element);
 
         element.append(newElement);
         return element;
