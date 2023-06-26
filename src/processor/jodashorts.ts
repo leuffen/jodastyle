@@ -18,6 +18,10 @@ export class Jodashorts {
             attrStr = attrStr.replaceAll("”", '"').replaceAll("“", '"').replaceAll("‘", "'").replaceAll("’", "'");
             attrStr = attrStr.replace(/([a-z0-9]+)=(["'])(.*?)\2/mig, (match, name, quote, value) => {
                 console.log("match", match, name, quote, value);
+                if (name === "class") {
+                    attrs["class"].push(...value.split(" "));
+                    return "";
+                }
                 attrs[name] = value;
                 return "";
             });
@@ -28,12 +32,12 @@ export class Jodashorts {
                     return;
                 if (attr.startsWith(".")) {
                     attrs["class"].push(attr.substr(1));
+                    return;
                 }
-                attrs["class"].push(attr);
+                attrs[attr] = "";
 
             });
 
-            console.log("attrs", attrs);
             let attrstr = "";
             for(let attr in attrs) {
                 if (attr === "class") {

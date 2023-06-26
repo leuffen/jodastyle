@@ -114,8 +114,6 @@ export function getTemplateFilledWithContent(templateSelector : string, content 
         throw new JodaElementException("Template not found: " + templateSelector);
     }
 
-
-    console.log("Found template: " + templateSelector, "on", origElement);
     // Load --layout-* variables to template parser
     let layout = {};
     let props = getComputedStyle(origElement);
@@ -150,6 +148,14 @@ export function getTemplateFilledWithContent(templateSelector : string, content 
             console.warn("No element found for selector: " + select + " in template: " + templateSelector + " for slot: " + slot);
             return;
         }
+
+        if (slot.hasAttribute("data-class")) {
+            selected.forEach((element) => {
+                // Add all classes from data-class attribute to selected element
+                element.classList.add(...slot.getAttribute("data-class").split(" ").filter((value) => value !== ""));
+            });
+        }
+
         if (slot.hasAttribute("data-replace") && selected) {
             slot.replaceWith(...selected);
         } else if(selected) {
@@ -159,7 +165,12 @@ export function getTemplateFilledWithContent(templateSelector : string, content 
 
     // Select <slot> element with no data-select attribute
     let slot = clone.querySelector("slot:not([data-select])");
-
+    if (slot !== null && slot.hasAttribute("data-class")) {
+        Array.from(content.children).forEach((element) => {
+            // Add all classes from data-class attribute to selected element
+            element.classList.add(...slot.getAttribute("data-class").split(" ").filter((value) => value !== ""));
+        });
+    }
     if (slot !== null && slot.hasAttribute("data-replace")) {
         slot.replaceWith(...content.children);
     } else if (slot !== null) {
