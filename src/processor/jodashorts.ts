@@ -9,17 +9,20 @@ export class Jodashorts {
 
     process (source : string) : string {
 
-        source = source.replace(/\[([a-z0-9\-)]+)(.*?)]/g, (match, name, attributes) => {
+        source = source.replace(/\[([a-z0-9\-)]+)(.*?)]/g, (match, name, attrStr) => {
             let attrs = {
                 "class": []
-            }
+            };
 
             // Search for name="value" or name='value'. Make sure that starting ' matches ending ' using back reference
-            attributes = attributes.replace(/([a-z0-9\-]+)=(['"])(.*?)\2/g, (match, name, quote, value) => {
+            attrStr = attrStr.replaceAll("”", '"').replaceAll("“", '"').replaceAll("‘", "'").replaceAll("’", "'");
+            attrStr = attrStr.replace(/([a-z0-9]+)=(["'])(.*?)\2/mig, (match, name, quote, value) => {
+                console.log("match", match, name, quote, value);
                 attrs[name] = value;
+                return "";
             });
 
-            attributes.split(" ").forEach((attr) => {
+            attrStr.split(" ").forEach((attr) => {
                 attr = attr.trim();
                 if (attr === "")
                     return;
@@ -30,6 +33,7 @@ export class Jodashorts {
 
             });
 
+            console.log("attrs", attrs);
             let attrstr = "";
             for(let attr in attrs) {
                 if (attr === "class") {
