@@ -14,7 +14,6 @@ export function template_parse(input : string, scope : {}, element: HTMLElement 
     });
 }
 
-
 export class QTemplate {
 
     public content : HTMLElement | HTMLDivElement

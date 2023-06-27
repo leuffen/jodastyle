@@ -57,7 +57,6 @@ export function registerJodaRenderer(name : string, renderer : new() => JodaRend
 
 export function jodaRenderer(name : string, config : new() => DefaultLayout) {
     return function (classOrDescriptor: new() => JodaRendererInterface) : void {
-        console.log(classOrDescriptor);
         registerJodaRenderer(name, classOrDescriptor, config);
     }
 }
@@ -108,7 +107,7 @@ export function parseConfigString(input: string): {[key: string]: string} {
 
 
 
-export function getTemplateFilledWithContent(templateSelector : string, content : HTMLElement, origElement : HTMLElement) : DocumentFragment {
+export async function getTemplateFilledWithContent(templateSelector : string, content : HTMLElement, origElement : HTMLElement) : DocumentFragment {
     let template = document.querySelector<HTMLTemplateElement>(templateSelector);
     if (template === null) {
         throw new JodaElementException("Template not found: " + templateSelector);
@@ -116,16 +115,19 @@ export function getTemplateFilledWithContent(templateSelector : string, content 
 
     // Load --layout-* variables to template parser
     let layout = {};
-    let props = getComputedStyle(origElement);
-    //console.log("props", props);
-    for(let key of props) {
-        if (key.startsWith("--layout-")) {
-            layout[key.substring(9)] = props.getPropertyValue(key);
 
-        }
-    }
+    let props = getComputedStyle(origElement);
+
     template = template.cloneNode(true) as HTMLTemplateElement;
-    template.innerHTML =  template_parse(template.innerHTML, {layout}, content);
+
+    // Attention: Chrome cannot list defined CSS Variables!
+    template.innerHTML =  template_parse(template.innerHTML, {
+        layout: new Proxy({}, {
+            get: function (target, name) {
+                return props.getPropertyValue("--layout-" + name);
+            }
+        })
+    }, content);
     let clone = document.importNode(template.content, true);
 
     clone.querySelectorAll("slot[data-select][data-copy]").forEach((slot) => {

@@ -31,13 +31,13 @@ jodaStyleCommands["--joda-replace-by"] = (value : string, target, element : HTML
     return ret.leaf;
 }
 
-jodaStyleCommands["--joda-wrap"] = (value : string, target, element : HTMLElement, logger : Logger) => {
+jodaStyleCommands["--joda-wrap"] = async (value : string, target, element : HTMLElement, logger : Logger) => {
     let parent = element.parentElement;
 
     if (value.startsWith("#")) {
         let placeholder = document.createElement("div");
         parent.insertBefore(placeholder, element);
-        let newElement = getTemplateFilledWithContent(value, element, element);
+        let newElement = await getTemplateFilledWithContent(value, element, element);
         placeholder.replaceWith(newElement);
         return element;
 
@@ -124,7 +124,7 @@ jodaStyleCommands["--joda-use"] = async(value : string, target, element : HTMLEl
         Array.from(element.children).forEach((child) => {
             placeholder.append(child);
         });
-        let newElement = getTemplateFilledWithContent(value, placeholder, element);
+        let newElement = await getTemplateFilledWithContent(value, placeholder, element);
 
         element.append(newElement);
         return element;
