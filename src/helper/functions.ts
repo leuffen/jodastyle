@@ -3,6 +3,7 @@ import {JodaRendererInterface} from "./JodaRenderer";
 import {DefaultLayout} from "../types/DefaultLayout";
 import {JodaElementException} from "./JodaElementException";
 import {QTemplate, template_parse} from "./QTemplate";
+import {Joda} from "../joda";
 
 
 export async function await_property(object : object, property : string[] | string, wait : number = 10) {
@@ -108,27 +109,34 @@ export function parseConfigString(input: string): {[key: string]: string} {
 
 
 export async function getTemplateFilledWithContent(templateSelector : string, content : HTMLElement, origElement : HTMLElement) : DocumentFragment {
-    let template = document.querySelector<HTMLTemplateElement>(templateSelector);
-    if (template === null) {
-        throw new JodaElementException("Template not found: " + templateSelector);
+    let templateHtml : string|null = Joda.getRegisteredTemplate(templateSelector);
+
+    if (templateHtml === null) {
+        let template = document.querySelector<HTMLTemplateElement>(templateSelector);
+        if (template === null) {
+            throw new JodaElementException("Template not found: " + templateSelector);
+        }
+        templateHtml = template.innerHTML;
     }
+
 
     // Load --layout-* variables to template parser
     let layout = {};
 
     let props = getComputedStyle(origElement);
 
-    template = template.cloneNode(true) as HTMLTemplateElement;
+
 
     // Attention: Chrome cannot list defined CSS Variables!
-    template.innerHTML =  template_parse(template.innerHTML, {
+    templateHtml =  template_parse(templateHtml, {
         layout: new Proxy({}, {
             get: function (target, name) {
                 return props.getPropertyValue("--layout-" + name);
             }
         })
     }, content);
-    let clone = document.importNode(template.content, true);
+
+    let clone = document.createRange().createContextualFragment(templateHtml);
 
     clone.querySelectorAll("slot[data-select][data-copy]").forEach((slot) => {
         let select = slot.getAttribute("data-select");
