@@ -107,7 +107,7 @@ export function parseConfigString(input: string): {[key: string]: string} {
 }
 
 
-
+let slotIndex = 0;
 export async function getTemplateFilledWithContent(templateSelector : string, content : HTMLElement, origElement : HTMLElement) : DocumentFragment {
     let templateHtml : string|null = Joda.getRegisteredTemplate(templateSelector);
 
@@ -138,11 +138,19 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
 
     let clone = document.createRange().createContextualFragment(templateHtml);
 
+    let done = [];
+
     clone.querySelectorAll("slot[data-select][data-copy]").forEach((slot) => {
+        if (done.includes(slot)) {
+            return;
+        }
+        done.push(slot);
+
+        slot.setAttribute("_slotIndex", (++slotIndex).toString());
         let select = slot.getAttribute("data-select");
         let selected = Array.from(content.querySelectorAll(select)).map((element) => element.cloneNode(true));
         if (selected.length === 0) {
-            console.warn("No element found for selector: " + select + " in template: " + templateSelector + " for slot: " + slot);
+            console.warn("No element found for selector: " + select + " in template: " + templateSelector + " for slot: ", slot);
             return;
         }
         if (slot.hasAttribute("data-replace") && selected) {
@@ -152,10 +160,16 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
         }
     });
     clone.querySelectorAll("slot[data-select]").forEach((slot) => {
+        if (done.includes(slot)) {
+            return;
+        }
+        done.push(slot);
+
+        slot.setAttribute("_slotIndex", (++slotIndex).toString());
         let select = slot.getAttribute("data-select");
         let selected = Array.from(content.querySelectorAll(select));
         if (selected.length === 0) {
-            console.warn("No element found for selector: " + select + " in template: " + templateSelector + " for slot: " + slot);
+            console.warn("No element found for selector: " + select + " in template: " + templateSelector + " for slot: ", slot);
             return;
         }
 
@@ -176,6 +190,12 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
     // Select <slot> element with no data-select attribute
     let slot = clone.querySelector("slot:not([data-select])");
     if (slot !== null && slot.hasAttribute("data-class")) {
+        if (done.includes(slot)) {
+            return;
+        }
+        done.push(slot);
+
+        slot.setAttribute("_slotIndex", (++slotIndex).toString());
         Array.from(content.children).forEach((element) => {
             // Add all classes from data-class attribute to selected element
             element.classList.add(...slot.getAttribute("data-class").split(" ").filter((value) => value !== ""));
