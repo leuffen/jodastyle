@@ -4,6 +4,7 @@ import {getCleanVariableValue} from "../helper/functions";
 import {ka_sleep} from "@kasimirjs/embed";
 import {JodaElementException} from "../helper/JodaElementException";
 import {JodaErrorElement} from "../helper/JodaErrorElement";
+import {LayoutProcessor} from "./LayoutProcessor";
 
 
 export class Jodastyle {
@@ -13,11 +14,21 @@ export class Jodastyle {
     }
 
     public async process(node : HTMLElement) {
+
+        // Wait for all joda-split to be ready
         for (let child of Array.from(node.getElementsByTagName("joda-split"))) {
             while (child["ready"] !== true) {
                 await ka_sleep(5);
             }
         }
+
+        // Run layout-attribute processor (for whole style - already running on joda-split)
+        let layoutProcessor = new LayoutProcessor(this.logger);
+        node.querySelectorAll("[layout]").forEach((node) => {
+            layoutProcessor.processNode(node as HTMLElement);
+        });
+
+        // Run jodastyle commands
         for (let child of [node, ...Array.from(node.querySelectorAll<HTMLElement>("*"))]) {
             let style = getComputedStyle(child);
 

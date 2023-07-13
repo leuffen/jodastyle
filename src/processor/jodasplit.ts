@@ -58,7 +58,8 @@ export class Jodasplit {
         let lastLayer = 1;
         this.#target.append(this.#currentParent);
 
-        let layoutProcessor = new LayoutProcessor(this.logger);
+        // Layout Processor now in JodaStyle
+        //let layoutProcessor = new LayoutProcessor(this.logger);
 
         Array.from(source.children).forEach((child : Element) => {
             if (child instanceof HTMLElement && child.matches("footer")) {
@@ -101,7 +102,7 @@ export class Jodasplit {
                 child.setAttribute("orig-class", child.getAttribute("class") || "");
                 child.setAttribute("class", "");
 
-                layoutProcessor.processNode(e);
+                //layoutProcessor.processNode(e);
             }
             if (child.tagName === "HR") {
                 child.setAttribute("orig-pre-split-class", child.getAttribute("class"));
