@@ -15,7 +15,7 @@ export class Jodashorts {
             };
 
             // Search for name="value" or name='value'. Make sure that starting ' matches ending ' using back reference
-            attrStr = attrStr.replaceAll("”", '"').replaceAll("“", '"').replaceAll("‘", "'").replaceAll("’", "'");
+            attrStr = attrStr.replace(/”/g, '"').replace(/“/g, '"').replace(/‘/g, "'").replace(/’/g, "'");
             attrStr = attrStr.replace(/([a-z0-9\-\.]+)=(["'])(.*?)\2/mig, (match, name, quote, value) => {
                 if (name === "class") {
                     attrs["class"].push(...value.split(" "));

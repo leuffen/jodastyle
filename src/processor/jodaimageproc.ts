@@ -60,23 +60,27 @@ export class JodaImageProc {
         for (let imgNode of node.querySelectorAll("img[src]") as any) {
             imageIndex++;
             let src = imgNode.getAttribute("src");
+            if ( ! processor.isSuitable(src))
+                continue;
+
             imgNode.setAttribute("data-src-orig", src);
 
-            if (processor.isSuitable(src)) {
-                let data = processor.parseUrl(src);
-                let bestFit = this.getBestResolution(data.resolutions);
-                imgNode.setAttribute("width", bestFit.width.toString());
-                imgNode.setAttribute("height", bestFit.height.toString());
-                if (imgNode.getAttribute("alt") === null)
-                    imgNode.setAttribute("alt", data.alt);
-                imgNode.setAttribute("src", data.getUrl(bestFit, this.getBestFormat(data.formats, mediaSupport)));
-            }
+            let data = processor.parseUrl(src);
+            let bestFit = this.getBestResolution(data.resolutions);
+            imgNode.setAttribute("width", bestFit.width.toString());
+            imgNode.setAttribute("height", bestFit.height.toString());
+            if (imgNode.getAttribute("alt") === null)
+                imgNode.setAttribute("alt", data.alt);
+            imgNode.setAttribute("src", data.getUrl(bestFit, this.getBestFormat(data.formats, mediaSupport)));
 
             if (imageIndex < 3) {
                 imgNode.setAttribute("loading", "eager");
             } else {
                 imgNode.setAttribute("loading", "lazy");
             }
+
+
+
 
         }
 
