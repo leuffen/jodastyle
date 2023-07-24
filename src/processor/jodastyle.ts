@@ -30,7 +30,13 @@ export class Jodastyle {
 
         // Run jodastyle commands
         for (let child of [node, ...Array.from(node.querySelectorAll<HTMLElement>("*"))]) {
+            if (child["joda-style-processed"] === true) {
+                continue;
+            }
+            child["joda-style-processed"] = true;
+
             let style = getComputedStyle(child);
+
 
             let keys = Object.keys(jodaStyleCommands);
             for (let key of Array.from(keys)) {
@@ -49,6 +55,7 @@ export class Jodastyle {
                 let command = jodaStyleCommands[key];
                 try {
                     child = await command(styleValue, node as HTMLDivElement, child, this.logger) as HTMLElement;
+
                 } catch (e) {
                     if (e instanceof JodaElementException) {
                         e.triggerCommand = key + ": " + styleValue;
@@ -61,6 +68,8 @@ export class Jodastyle {
                 }
 
             }
+            await this.process(child); // Recursive parse replaced elements
         }
+
     }
 }
