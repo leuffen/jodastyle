@@ -1,6 +1,6 @@
 {
   "name": "@leuffen/jodastyle",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "main": "./dist/index.js",
   "module": "./dist/index.module.js",
@@ -10,7 +10,8 @@
   },
   "files": [
     "/dist",
-    "/src"
+    "/src",
+    "*.scss"
   ],
   "workspaces": [
     "workspaces/*"
