@@ -108,7 +108,7 @@ export function parseConfigString(input: string): {[key: string]: string} {
 
 
 let slotIndex = 0;
-export async function getTemplateFilledWithContent(templateSelector : string, content : HTMLElement, origElement : HTMLElement) : DocumentFragment {
+export async function getTemplateFilledWithContent(templateSelector : string, content : HTMLElement, origElement : HTMLElement) : Promise<DocumentFragment> {
     let templateHtml : string|null = Joda.getRegisteredTemplate(templateSelector);
 
     if (templateHtml === null) {
@@ -131,7 +131,7 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
     templateHtml =  template_parse(templateHtml, {
         layout: new Proxy({}, {
             get: function (target, name) {
-                return props.getPropertyValue("--layout-" + name);
+                return props.getPropertyValue("--layout-" + name.toString());
             }
         })
     }, content);
@@ -202,9 +202,9 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
         });
     }
     if (slot !== null && slot.hasAttribute("data-replace")) {
-        slot.replaceWith(...content.children);
+        slot.replaceWith(...Array.from(content.children));
     } else if (slot !== null) {
-        slot.append(...content.children);
+        slot.append(...Array.from(content.children));
     } else {
         content.remove();
     }
