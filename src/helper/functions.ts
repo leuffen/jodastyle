@@ -120,6 +120,7 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
     }
 
 
+
     // Load --layout-* variables to template parser
     let layout = {};
 
@@ -148,7 +149,14 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
 
         slot.setAttribute("_slotIndex", (++slotIndex).toString());
         let select = slot.getAttribute("data-select");
-        let selected = Array.from(content.querySelectorAll(select)).map((element) => element.cloneNode(true));
+
+        let selected : any;
+        if (slot.getAttribute("data-limit") === "1") {
+            selected = Array.from([content.querySelector(select)]).map((element) => element.cloneNode(true));
+        } else {
+            selected = Array.from(content.querySelectorAll(select)).map((element) => element.cloneNode(true));
+        }
+
         if (selected.length === 0) {
             console.warn("No element found for selector: " + select + " in template: " + templateSelector + " for slot: ", slot);
             return;
@@ -167,7 +175,15 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
 
         slot.setAttribute("_slotIndex", (++slotIndex).toString());
         let select = slot.getAttribute("data-select");
-        let selected = Array.from(content.querySelectorAll(select));
+
+
+
+        let selected: any;
+        if (slot.getAttribute("data-limit") === "1") {
+            selected = Array.from([content.querySelector(select)]);
+        } else {
+            selected = Array.from(content.querySelectorAll(select));
+        }
         if (selected.length === 0) {
             console.warn("No element found for selector: " + select + " in template: " + templateSelector + " for slot: ", slot);
             return;
