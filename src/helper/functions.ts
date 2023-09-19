@@ -132,7 +132,13 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
     templateHtml =  template_parse(templateHtml, {
         layout: new Proxy({}, {
             get: function (target, name) {
-                return props.getPropertyValue("--layout-" + name.toString());
+                let val =  props.getPropertyValue("--layout-" + name.toString());
+                //console.log("Get layout property: ", name, val);
+                if (val === "true")
+                    return true;
+                if (val === "false")
+                    return false;
+                return val;
             }
         })
     }, content);
