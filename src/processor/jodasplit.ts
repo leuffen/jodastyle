@@ -95,13 +95,16 @@ export class Jodasplit {
                 e.setAttribute("layout", child.getAttribute("layout") || "");
                 child.removeAttribute("layout");
 
-                e.setAttribute("style", child.getAttribute("style") || "");
-                child.removeAttribute("style");
+                if (child.tagName === "HR" && ! child.classList.contains("hr")) {
+                    // Only copy styles from HR Elements not marked as .hr
 
-                e.classList.add(...child.classList as any);
-                child.setAttribute("orig-class", child.getAttribute("class") || "");
-                child.setAttribute("class", "");
+                    e.setAttribute("style", child.getAttribute("style") || "");
+                    child.removeAttribute("style");
 
+                    e.classList.add(...child.classList as any);
+                    child.setAttribute("orig-class", child.getAttribute("class") || "");
+                    child.setAttribute("class", "");
+                }
                 //layoutProcessor.processNode(e);
             }
             if (child.tagName === "HR" &&  ! child.classList.contains("hr")) {

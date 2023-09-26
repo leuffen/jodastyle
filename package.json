@@ -1,6 +1,6 @@
 {
   "name": "@leuffen/jodastyle",
-  "version": "1.0.9",
+  "version": "2.0.1",
   "description": "",
   "main": "./dist/index.js",
   "module": "./dist/index.module.js",
