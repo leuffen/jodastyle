@@ -40,7 +40,7 @@ export class __JodaDescriptionManager {
 
 
     get data() : Description[] {
-        return window["jodastyle"]["descriptions"];
+        return window["jodastyle"]["descriptions"] ?? [];
     }
 
     get classes() {
