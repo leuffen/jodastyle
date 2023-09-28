@@ -17,7 +17,14 @@ type Commands = {
 export let jodaStyleCommands : Commands = {};
 
 
-
+/**
+ * Replace the element with the given @class > @id=elementId template
+ *
+ * @param value
+ * @param target
+ * @param element
+ * @param logger
+ */
 jodaStyleCommands["--joda-replace-by"] = (value : string, target, element : HTMLElement, logger : Logger) => {
     let parent = element.parentElement;
     let ret = createElementTree(value)
@@ -31,14 +38,29 @@ jodaStyleCommands["--joda-replace-by"] = (value : string, target, element : HTML
     return ret.leaf;
 }
 
+/**
+ * Wrap the selected element with the Template
+ *
+ * @param value
+ * @param target
+ * @param element
+ * @param logger
+ */
 jodaStyleCommands["--joda-wrap"] = async (value : string, target, element : HTMLElement, logger : Logger) => {
     let parent = element.parentElement;
 
     if (value.startsWith("#")) {
+        console.log("Wrap element", element, "with template", value);
+
         let placeholder = document.createElement("div");
         parent.insertBefore(placeholder, element);
-        let newElement = await getTemplateFilledWithContent(value, element, element);
+
+        // Move Element to placeholder (to be able to access it in <slot>)
+        placeholder.append(element);
+
+        let newElement = await getTemplateFilledWithContent(value, placeholder, element);
         placeholder.replaceWith(newElement);
+
         return element;
 
     } else {
