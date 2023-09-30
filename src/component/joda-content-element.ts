@@ -4,6 +4,7 @@ import {Jodastyle} from "../processor/jodastyle";
 import {getCurrentBreakpoint, Jodaresponsive} from "../processor/jodaresponsive";
 import {Logger} from "../helper/logger";
 import {Jodavisualize} from "../processor/jodavisualize";
+import {jodaSiteConfig} from "../helper/JodaSiteConfig";
 
 
 function getCSSRule(ruleName : string) : CSSStyleRule {
@@ -73,6 +74,9 @@ export class JodaContentElement extends HTMLElement {
 
 
 
+        if (jodaSiteConfig.disable_templates) {
+            return;
+        }
 
 
         // Process the content
@@ -85,9 +89,9 @@ export class JodaContentElement extends HTMLElement {
         jodaresponsive.process(this as HTMLElement);
 
         // For documentation: Add Class and Tag-Names
-        if(this.hasAttribute("visualize")) {
+        if(jodaSiteConfig.debug_visualize && jodaSiteConfig.debug_visualize_attribute) {
             logger.log("Adding class and tag names");
-            (new Jodavisualize()).process(this.#outputDiv as HTMLElement);
+            (new Jodavisualize()).process(this as HTMLElement);
         }
 
         this.setLoaded();

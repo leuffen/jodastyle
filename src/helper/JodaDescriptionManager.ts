@@ -40,6 +40,11 @@ export class __JodaDescriptionManager {
 
 
     get data() : Description[] {
+        if (window["jodastyle"] === undefined) {
+            console.warn("[jodastyle description manager] No jodastyle descriptions found (Make sure you imported a theme) => window.jodastyle is undefined");
+            return [];
+        }
+
         return window["jodastyle"]["descriptions"] ?? [];
     }
 
