@@ -8,6 +8,40 @@ interface JodaSplitConfig {
 
 }
 
+/**
+ * Copy attributes data-section-* from source to target
+ *
+ * So data-section-class becomes class on target
+ *
+ * On data-section-class it will add the classs to the existing classes
+ * On data-section-style it will add the styles to existing styles
+ *
+ * @param source
+ * @param target
+ */
+function copySectionAttributes(source : HTMLElement, target : HTMLElement) {
+    source.getAttributeNames().forEach((name : string) => {
+
+        if ( ! name.startsWith("data-section-")) {
+            return;
+        }
+        let value = source.getAttribute(name);
+        name = name.substr(13);
+        if (name === "class") {
+            // Filter empty classes
+            target.classList.add(...value.split(" ").filter((c : string) => c.length > 0));
+            return;
+        }
+        if (name === "style") {
+            // Filter empty classes
+            target.setAttribute("style", (target.getAttribute("style") || "") + value);
+            return;
+        }
+        // default
+        target.setAttribute(name, value);
+
+    });
+}
 
 export class Jodasplit {
 
@@ -95,6 +129,9 @@ export class Jodasplit {
                 e.setAttribute("layout", child.getAttribute("layout") || "");
                 child.removeAttribute("layout");
 
+                // Copy data-section-* attributes to the new element
+                copySectionAttributes(child, e);
+
                 if (child.tagName === "HR" && ! child.classList.contains("hr")) {
                     // Only copy styles from HR Elements not marked as .hr
 
@@ -108,7 +145,7 @@ export class Jodasplit {
                 //layoutProcessor.processNode(e);
             }
             if (child.tagName === "HR" &&  ! child.classList.contains("hr")) {
-                console.log("hr", child);
+
                 child.setAttribute("orig-pre-split-class", child.getAttribute("class"));
                 child.setAttribute("class", "d-none");
             }

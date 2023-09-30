@@ -50,3 +50,14 @@ The layout attribute is a way to define layout options directly on a html elemen
 ```
 
 Will be parsed to `<div style="--joda-use: #someElement; --layout-configOption: option"></div>`
+
+
+
+## Using templates
+
+Add a class to the section using `data-section-*' attributes on structural elements.
+
+```markdown
+## Section Heading
+{: layout="use: #sectionHeading; configOption: option" data-section-class="someClass"}
+```
