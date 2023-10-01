@@ -148,8 +148,39 @@ jodaStyleCommands["--joda-use"] = async(value : string, target, element : HTMLEl
         });
         let newElement = await getTemplateFilledWithContent(value, placeholder, element);
 
-        element.append(newElement);
-        return element;
+        console.log("new: ", newElement, newElement.firstElementChild);
+
+
+
+        let firstElement = newElement.firstElementChild;
+        firstElement["joda-style-processed"] = true; // Set style as processed (to prevent double processing)
+
+        // Copy first line of the outerHTML string of the element
+        let debugElement = element.outerHTML.split("\n")[0];
+        firstElement.setAttribute("_orig_elem", debugElement);
+
+
+        element.getAttributeNames().forEach((attrName) => {
+
+                // copy attributes but. Append class and styles
+            if (attrName === "class") {
+                firstElement.setAttribute(attrName, element.getAttribute(attrName) + " " + firstElement.getAttribute(attrName) ?? "");
+                return;
+            }
+            if (attrName === "style") {
+                firstElement.setAttribute(attrName, element.getAttribute(attrName) + " " + firstElement.getAttribute(attrName) ?? "");
+                return;
+            }
+            if(attrName.startsWith("layout")) {
+                firstElement.setAttribute("layout-orig", element.getAttribute(attrName));
+                return;
+            }
+
+            firstElement.setAttribute(attrName, element.getAttribute(attrName));
+        });
+        element.parentElement.insertBefore(newElement, element);
+        element.parentElement.removeChild(element);
+        return firstElement;
     }
 
 
