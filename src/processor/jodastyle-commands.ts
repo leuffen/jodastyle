@@ -148,10 +148,6 @@ jodaStyleCommands["--joda-use"] = async(value : string, target, element : HTMLEl
         });
         let newElement = await getTemplateFilledWithContent(value, placeholder, element);
 
-        console.log("new: ", newElement, newElement.firstElementChild);
-
-
-
         let firstElement = newElement.firstElementChild;
         firstElement["joda-style-processed"] = true; // Set style as processed (to prevent double processing)
 
@@ -162,7 +158,7 @@ jodaStyleCommands["--joda-use"] = async(value : string, target, element : HTMLEl
 
         element.getAttributeNames().forEach((attrName) => {
 
-                // copy attributes but. Append class and styles
+            // copy attributes but. Append class and styles
             if (attrName === "class") {
                 firstElement.setAttribute(attrName, element.getAttribute(attrName) + " " + firstElement.getAttribute(attrName) ?? "");
                 return;

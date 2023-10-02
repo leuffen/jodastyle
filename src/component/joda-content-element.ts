@@ -76,9 +76,12 @@ export class JodaContentElement extends HTMLElement {
 
         if (jodaSiteConfig.disable_templates) {
             this.setLoaded();
+            // For documentation: Add Class and Tag-Names
+            if(jodaSiteConfig.debug_visualize && jodaSiteConfig.debug_visualize_attribute) {
+                (new Jodavisualize()).process(this as HTMLElement);
+            }
             return;
         }
-
 
         // Process the content
         let jodaStyle = new Jodastyle(logger);
