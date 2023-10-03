@@ -107,6 +107,29 @@ export function parseConfigString(input: string): {[key: string]: string} {
 }
 
 
+/**
+ * Copy all data-child-* attributes from source to target element
+ *
+ * e.g. <slot data-child-class="abc"> Will result in <div class="abc">
+ *     Also: <slot data-child-layout="use: #someElement"> Will result in <div layout="use: #someElement">
+ * @param source
+ * @param target
+ */
+function copyDataChildAttributes(source : HTMLElement, target : HTMLElement) {
+    Array.from(source.attributes).forEach((attr) => {
+        if (attr.name.startsWith("data-child-")) {
+            // if attribute is class, append classed to existing class attribute
+            if (attr.name === "data-child-class") {
+                target.classList.add(...attr.value.split(" ").filter((value) => value !== ""));
+                return;
+            }
+            target.setAttribute(attr.name.substring(11), attr.value);
+        }
+    });
+}
+
+
+
 let slotIndex = 0;
 export async function getTemplateFilledWithContent(templateSelector : string, content : HTMLElement, origElement : HTMLElement) : Promise<DocumentFragment> {
     let templateHtml : string|null = Joda.getRegisteredTemplate(templateSelector);
@@ -163,6 +186,10 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
             selected = Array.from(content.querySelectorAll(select)).map((element) => element.cloneNode(true));
         }
 
+        selected.forEach((element) => {
+            copyDataChildAttributes(slot as HTMLElement, element);
+        })
+
         if (selected.length === 0) {
             console.warn("No element found for selector: " + select + " in template: " + templateSelector + " for slot: ", slot);
             return;
@@ -194,13 +221,11 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
             console.warn("No element found for selector: " + select + " in template: " + templateSelector + " for slot: ", slot);
             return;
         }
+        selected.forEach((element) => {
+            copyDataChildAttributes(slot as HTMLElement, element);
+        })
 
-        if (slot.hasAttribute("data-class")) {
-            selected.forEach((element) => {
-                // Add all classes from data-class attribute to selected element
-                element.classList.add(...slot.getAttribute("data-class").split(" ").filter((value) => value !== ""));
-            });
-        }
+
 
         if (slot.hasAttribute("data-replace") && selected) {
             slot.replaceWith(...selected);

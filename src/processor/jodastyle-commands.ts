@@ -17,7 +17,14 @@ type Commands = {
 export let jodaStyleCommands : Commands = {};
 
 
-
+/**
+ * Replace the element with the given @class > @id=elementId template
+ *
+ * @param value
+ * @param target
+ * @param element
+ * @param logger
+ */
 jodaStyleCommands["--joda-replace-by"] = (value : string, target, element : HTMLElement, logger : Logger) => {
     let parent = element.parentElement;
     let ret = createElementTree(value)
@@ -31,14 +38,29 @@ jodaStyleCommands["--joda-replace-by"] = (value : string, target, element : HTML
     return ret.leaf;
 }
 
+/**
+ * Wrap the selected element with the Template
+ *
+ * @param value
+ * @param target
+ * @param element
+ * @param logger
+ */
 jodaStyleCommands["--joda-wrap"] = async (value : string, target, element : HTMLElement, logger : Logger) => {
     let parent = element.parentElement;
 
     if (value.startsWith("#")) {
+        console.log("Wrap element", element, "with template", value);
+
         let placeholder = document.createElement("div");
         parent.insertBefore(placeholder, element);
-        let newElement = await getTemplateFilledWithContent(value, element, element);
+
+        // Move Element to placeholder (to be able to access it in <slot>)
+        placeholder.append(element);
+
+        let newElement = await getTemplateFilledWithContent(value, placeholder, element);
         placeholder.replaceWith(newElement);
+
         return element;
 
     } else {
@@ -126,8 +148,35 @@ jodaStyleCommands["--joda-use"] = async(value : string, target, element : HTMLEl
         });
         let newElement = await getTemplateFilledWithContent(value, placeholder, element);
 
-        element.append(newElement);
-        return element;
+        let firstElement = newElement.firstElementChild;
+        firstElement["joda-style-processed"] = true; // Set style as processed (to prevent double processing)
+
+        // Copy first line of the outerHTML string of the element
+        let debugElement = element.outerHTML.split("\n")[0];
+        firstElement.setAttribute("_orig_elem", debugElement);
+
+
+        element.getAttributeNames().forEach((attrName) => {
+
+            // copy attributes but. Append class and styles
+            if (attrName === "class") {
+                firstElement.setAttribute(attrName, element.getAttribute(attrName) + " " + firstElement.getAttribute(attrName) ?? "");
+                return;
+            }
+            if (attrName === "style") {
+                firstElement.setAttribute(attrName, element.getAttribute(attrName) + " " + firstElement.getAttribute(attrName) ?? "");
+                return;
+            }
+            if(attrName.startsWith("layout")) {
+                firstElement.setAttribute("layout-orig", element.getAttribute(attrName));
+                return;
+            }
+
+            firstElement.setAttribute(attrName, element.getAttribute(attrName));
+        });
+        element.parentElement.insertBefore(newElement, element);
+        element.parentElement.removeChild(element);
+        return firstElement;
     }
 
 

@@ -3,8 +3,8 @@ import {Jodasplit} from "../processor/jodasplit";
 import {Jodastyle} from "../processor/jodastyle";
 import {getCurrentBreakpoint, Jodaresponsive} from "../processor/jodaresponsive";
 import {Logger} from "../helper/logger";
-import {JodaImageProc} from "../processor/jodaimageproc";
 import {Jodavisualize} from "../processor/jodavisualize";
+import {jodaSiteConfig} from "../helper/JodaSiteConfig";
 
 
 function getCSSRule(ruleName : string) : CSSStyleRule {
@@ -63,9 +63,6 @@ export class JodaContentElement extends HTMLElement {
         let logger = new Logger("joda-content");
         await ka_sleep(1);
 
-
-        let jodaImage = new JodaImageProc(logger);
-        await jodaImage.process(this);
         await this.awaitStyles();
 
         this.#origContentTemplate = ka_create_element("template") as HTMLTemplateElement;
@@ -77,7 +74,14 @@ export class JodaContentElement extends HTMLElement {
 
 
 
-
+        if (jodaSiteConfig.disable_templates) {
+            this.setLoaded();
+            // For documentation: Add Class and Tag-Names
+            if(jodaSiteConfig.debug_visualize && jodaSiteConfig.debug_visualize_attribute) {
+                (new Jodavisualize()).process(this as HTMLElement);
+            }
+            return;
+        }
 
         // Process the content
         let jodaStyle = new Jodastyle(logger);
@@ -89,9 +93,8 @@ export class JodaContentElement extends HTMLElement {
         jodaresponsive.process(this as HTMLElement);
 
         // For documentation: Add Class and Tag-Names
-        if(this.hasAttribute("visualize")) {
-            logger.log("Adding class and tag names");
-            (new Jodavisualize()).process(this.#outputDiv as HTMLElement);
+        if(jodaSiteConfig.debug_visualize && jodaSiteConfig.debug_visualize_attribute) {
+            (new Jodavisualize()).process(this as HTMLElement);
         }
 
         this.setLoaded();

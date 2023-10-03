@@ -15,4 +15,6 @@ export * from "./helper/JodaDescriptionManager";
 export * from "./helper/logger";
 export * from "./processor/jodasplit";
 
+export * from "./helper/JodaSiteConfig";
+
 export * from "./joda";
