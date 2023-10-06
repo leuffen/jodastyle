@@ -11,7 +11,7 @@ import {JodaErrorElement} from "../helper/JodaErrorElement";
 import {JodaElementException} from "../helper/JodaElementException";
 
 type Commands = {
-    [command: string]: ((value : string, target : HTMLDivElement, element : HTMLElement, logger : Logger) => HTMLElement|Promise<HTMLElement>);
+    [command: string]: ((value : string, target : HTMLDivElement, element : HTMLElement, logger : Logger) => HTMLElement|Promise<HTMLElement>|Element|Promise<Element>);
 }
 
 export let jodaStyleCommands : Commands = {};
