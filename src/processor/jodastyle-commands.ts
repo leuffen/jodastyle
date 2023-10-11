@@ -205,3 +205,12 @@ jodaStyleCommands["--joda-use"] = async(value : string, target, element : HTMLEl
 
     return await (new command.renderer).render(element, config);
 }
+
+
+jodaStyleCommands["--joda-on-empty-class"] = async (value : string, target, element : HTMLElement, logger : Logger) => {
+    console.log("Check if element is empty", element.textContent.trim(), "and add class", value);
+    if (element.textContent.trim() === "") {
+        element.classList.add(value);
+    }
+    return element
+};
