@@ -132,7 +132,8 @@ function copyDataChildAttributes(source : HTMLElement, target : HTMLElement) {
 
 let slotIndex = 0;
 export async function getTemplateFilledWithContent(templateSelector : string, content : HTMLElement, origElement : HTMLElement) : Promise<DocumentFragment> {
-    let templateHtml : string|null = Joda.getRegisteredTemplate(templateSelector);
+    let templateConfig = Joda.getRegisteredTemplate(templateSelector);
+    let templateHtml = templateConfig.template ?? null;
 
     if (templateHtml === null) {
         let template = document.querySelector<HTMLTemplateElement>(templateSelector);
@@ -145,7 +146,7 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
 
 
     // Load --layout-* variables to template parser
-    let layout = {};
+
 
     let props = getComputedStyle(origElement);
 
@@ -156,7 +157,12 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
         layout: new Proxy({}, {
             get: function (target, name) {
                 let val =  props.getPropertyValue("--layout-" + name.toString());
-                //console.log("Get layout property: ", name, val);
+
+                if(val === "") {
+                    // Return default from template config
+                    return templateConfig?.layoutDefaults[name.toString()] ?? "";
+                }
+
                 if (val === "true")
                     return true;
                 if (val === "false")
