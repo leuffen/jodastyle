@@ -219,7 +219,12 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
 
         let selected: any;
         if (slot.getAttribute("data-limit") === "1") {
-            selected = Array.from([content.querySelector(select)]);
+            let curElements = content.querySelector(select);
+            if (curElements === null) {
+                selected = [];
+            } else {
+                selected = Array.from([content.querySelector(select)]);
+            }
         } else {
             selected = Array.from(content.querySelectorAll(select));
         }
