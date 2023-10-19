@@ -137,7 +137,7 @@ function copyDataChildAttributes(source : HTMLElement, target : HTMLElement) {
 let slotIndex = 0;
 export async function getTemplateFilledWithContent(templateSelector : string, content : HTMLElement, origElement : HTMLElement) : Promise<DocumentFragment> {
     let templateConfig = Joda.getRegisteredTemplate(templateSelector);
-    let templateHtml = templateConfig.template ?? null;
+    let templateHtml = templateConfig?.template ?? null;
 
     if (templateHtml === null) {
         let template = document.querySelector<HTMLTemplateElement>(templateSelector);
