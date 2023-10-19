@@ -1,7 +1,24 @@
 
 type TemplateCallbacks = {
-    //onBeforeTemplateLoad?: (template: string, element: HTMLElement) => void,
+
+    /**
+     * Called after the Template was connected (added to DOM)
+     *
+     * @param element   The root element of the template
+     */
+    onAfterConnectedCallback?: (element: HTMLElement) => void,
+
+
+    /**
+     * Called after all templates were connected (added to DOM) and initialized.
+     * Use this Callback to add special functionality to your template
+     *
+     * @param element   The root element of the template
+     */
+    onAfterAllTemplatesConnectedCallback?: (element: HTMLElement) => void,
 }
+
+
 type TemplateData = {
     template: string,
     layoutDefaults: {[key: string]: string|number|boolean}

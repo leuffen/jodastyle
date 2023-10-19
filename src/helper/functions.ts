@@ -6,6 +6,10 @@ import {QTemplate, template_parse} from "./QTemplate";
 import {Joda} from "../joda";
 
 
+
+export let allTemplatesConnectedCallbacks : any[] = [];
+
+
 export async function await_property(object : object, property : string[] | string, wait : number = 10) {
     if (typeof property === "string") {
         property = property.split(".");
@@ -267,5 +271,20 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
         content.remove();
     }
 
+
+
     return clone;
+}
+
+
+
+export async function runCallbacksForTemplate(templateSelector: string , element : HTMLElement) {
+    let templateConfig = Joda.getRegisteredTemplate(templateSelector);
+    if (templateConfig?.callbacks?.onAfterConnectedCallback) {
+        await templateConfig.callbacks.onAfterConnectedCallback(element as HTMLElement);
+    }
+    if (templateConfig?.callbacks?.onAfterAllTemplatesConnectedCallback) {
+        // Spool up callback (executed by jodastyle)
+        allTemplatesConnectedCallbacks.push(async() => templateConfig.callbacks.onAfterAllTemplatesConnectedCallback(element as HTMLElement));
+    }
 }

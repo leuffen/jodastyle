@@ -3,7 +3,7 @@ import {
     await_property,
     getCleanVariableValue,
     getTemplateFilledWithContent,
-    JodaUseRenderer
+    JodaUseRenderer, runCallbacksForTemplate
 } from "../helper/functions";
 import {Logger} from "../helper/logger";
 import {ka_eval} from "@kasimirjs/embed";
@@ -60,6 +60,9 @@ jodaStyleCommands["--joda-wrap"] = async (value : string, target, element : HTML
 
         let newElement = await getTemplateFilledWithContent(value, placeholder, element);
         placeholder.replaceWith(newElement);
+
+        await runCallbacksForTemplate(value, element as HTMLElement);
+
 
         return element;
 
@@ -176,6 +179,7 @@ jodaStyleCommands["--joda-use"] = async(value : string, target, element : HTMLEl
         });
         element.parentElement.insertBefore(newElement, element);
         element.parentElement.removeChild(element);
+        await runCallbacksForTemplate(value, firstElement as HTMLElement);
         return firstElement;
     }
 

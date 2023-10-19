@@ -5,6 +5,7 @@ import {getCurrentBreakpoint, Jodaresponsive} from "../processor/jodaresponsive"
 import {Logger} from "../helper/logger";
 import {Jodavisualize} from "../processor/jodavisualize";
 import {jodaSiteConfig} from "../helper/JodaSiteConfig";
+import {allTemplatesConnectedCallbacks} from "../helper/functions";
 
 
 function getCSSRule(ruleName : string) : CSSStyleRule {
@@ -110,6 +111,11 @@ export class JodaContentElement extends HTMLElement {
             jodaresponsive.process(this as HTMLElement);
 
         });
+
+        // Run all allTemplateConnectedCallbacks registered
+        for(let callback of allTemplatesConnectedCallbacks) {
+            await callback();
+        }
     }
 
 
