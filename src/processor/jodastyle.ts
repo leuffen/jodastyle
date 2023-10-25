@@ -18,7 +18,7 @@ export class Jodastyle {
         // Wait for all joda-split to be ready
         for (let child of Array.from(node.getElementsByTagName("joda-split"))) {
             while (child["ready"] !== true) {
-                await ka_sleep(5);
+                await ka_sleep(10);
             }
         }
 
@@ -29,13 +29,17 @@ export class Jodastyle {
         });
 
         // Run jodastyle commands
-        for (let child of [node, ...Array.from(node.querySelectorAll<HTMLElement>("*"))]) {
+        for (let child of [node, ...Array.from(node.children)] as HTMLElement[]) {
             if (child["joda-style-processed"] === true) {
                 continue;
             }
             child["joda-style-processed"] = true;
 
             let style = getComputedStyle(child);
+            let parentStyle = null;
+            if (child.parentElement) {
+                parentStyle = getComputedStyle(child.parentElement);
+            }
 
 
             let keys = Object.keys(jodaStyleCommands);
@@ -45,17 +49,17 @@ export class Jodastyle {
                 if (styleValue === "") {
                     continue;
                 }
-                if (styleValue === getComputedStyle(child.parentElement).getPropertyValue(key)) {
+                if (parentStyle !== null && styleValue === parentStyle.getPropertyValue(key)) {
                     continue; // Inherited from parent
                 }
 
                 // Replace starting and ending with " or ' with nothing
                 styleValue = getCleanVariableValue(styleValue)
 
+                //await ka_sleep(10);
                 let command = jodaStyleCommands[key];
                 try {
                     child = await command(styleValue, node as HTMLDivElement, child, this.logger) as HTMLElement;
-
                 } catch (e) {
                     if (e instanceof JodaElementException) {
                         e.triggerCommand = key + ": " + styleValue;
