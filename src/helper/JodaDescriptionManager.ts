@@ -4,12 +4,13 @@ type Description = {
     category: "page"|"hero"|"element"|"section"|"footer",
     className: string,
     description: string,
-    example : string,
+    example : string|null,
+    exampleUri : string|null,
     modifiers: Modifiers[]
     config: Config
 }
 
-interface Config  {
+interface Config {
     bodyClasses?: string[];
     parseMarkdown?: boolean;
 }
@@ -38,6 +39,25 @@ export class __JodaDescriptionManager {
         window["jodastyle"]["descriptions"].push({category, className, description, example, modifiers, config});
     }
 
+
+    public addMarkdownPage(uri : string, name: string) {
+        if (window["jodastyle"] === undefined) {
+            window["jodastyle"] = {};
+        }
+        if (window["jodastyle"]["descriptions"] === undefined) {
+            window["jodastyle"]["descriptions"] = [];
+        }
+        window["jodastyle"]["descriptions"].push({
+            category: "page",
+            className: name,
+            description: "A page with markdown content",
+            exampleUri: uri,
+            modifiers: [],
+            config: {
+                parseMarkdown: true
+            }
+        });
+    }
 
     get data() : Description[] {
         if (window["jodastyle"] === undefined) {
