@@ -23,6 +23,27 @@ Welcome to the JodaStyle documentation. This guide is intended for developers wh
 
 JodaStyle is a library designed to render Markdown-style HTML in the browser and apply templates dynamically. It provides a set of tools for defining templates, restructuring HTML input, and implementing responsive design through the `layout=""` attribute and CSS variables.
 
+### Quick Reference
+
+Here's a quick reference to the most important features of JodaStyle:
+
+#### Commands
+- `--joda-wrap`
+- `--joda-use`
+- `--joda-replace-by`
+- `--joda-container`
+- `--joda-unwrap`
+- `--joda-group`
+- `--joda-class`
+- `--joda-on-empty-class`
+
+#### Attributes
+- `layout`
+- `data-select`
+- `data-replace`
+- `data-copy`
+- `data-child-class`
+
 ## Installation
 
 To install JodaStyle, run the following command in your project directory:
@@ -169,7 +190,7 @@ JodaSplit transforms the input into a tree structure where `<h1>` and `<h2>` ele
 
 You can use `<hr>` elements to insert sub-elements. Additional attributes and classes set on an element with the `layout=""` attribute will be preserved.
 
-For a detailed example of how JodaSplit processes input, see the [jodasplit-output.html](/jodasplit/jodasplit-output.html) file.
+For a detailed example of how JodaSplit processes input, see the [jodasplit-output.html](/examples/jodasplit/jodasplit-output.html) file.
 
 ### Responsive Design (Jodaresponsive)
 
@@ -206,7 +227,7 @@ This is equivalent to:
 | xl         | 1200px |
 | xxl        | 1400px |
 
-For more information on how to use responsive design with JodaStyle, refer to the [Jodaresponsive](/processor/jodaresponsive.ts) processor.
+For more information on how to use responsive design with JodaStyle, refer to the [Jodaresponsive](/src/processor/jodaresponsive.ts) processor.
 
 ## API Reference
 
@@ -214,7 +235,7 @@ For more information on how to use responsive design with JodaStyle, refer to th
 - `Joda.getRegisteredTemplate(name)`: Retrieves a registered template.
 - `JodaContentElement.setContent(content)`: Sets the content of a `JodaContentElement`.
 
-For a complete API reference, please refer to the [index.ts](/index.ts) file.
+For a complete API reference, please refer to the [index.ts](/src/index.ts) file.
 
 ## Configuration
 
@@ -263,7 +284,7 @@ Q: What should I do if I encounter unexpected behavior?
 A: If you encounter unexpected behavior, first ensure that you have followed the documentation correctly. Check for any typos or errors in your code. If the issue persists, enable debugging in `jodaSiteConfig` to get more insights. If you're still unable to resolve the problem, feel free to [open an issue](https://github.com/leuffen/jodastyle/issues) on GitHub with a detailed description of the problem and steps to reproduce it.
 
 Q: Where can I find examples of using JodaStyle?
-A: You can find examples throughout this documentation. Additionally, the [example.html](/example.html) file provides a practical example of how to use JodaStyle in a project.
+A: You can find examples throughout this documentation. Additionally, the [example.html](/examples/example.html) file provides a practical example of how to use JodaStyle in a project.
 
 Q: How can I contribute to JodaStyle if I'm not a programmer?
 A: Non-programmers can contribute to JodaStyle by providing feedback, reporting issues, and suggesting improvements. Documentation contributions are also welcome.
