@@ -1,0 +1,14 @@
+Jodashorts ermöglichen im Text schnell ein HTML Element ohne unterelement anzulgen:
+
+```html
+[element attr="" attr2=""]
+```
+
+In der Regel genutzt, um Input-Element o.ä. zu erstellen.
+
+```markdown
+[input type="submit" class="btn btn-primary" value="Absenden"]
+[input type="submit" class="btn btn-primary" value="Absenden"]
+```
+
+

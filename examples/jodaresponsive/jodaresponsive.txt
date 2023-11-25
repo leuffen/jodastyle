@@ -1,0 +1,19 @@
+Jodaresponsive ersetzt mediaQuerys in CSS Dateien. z.B. bei Bootstrap. Dadurch kann die Größe der CSS Dateien drastisch reduziert werden.
+
+Die Syntax im class="" Attribut ist wie folgt:
+
+```
+class="classe :: <defaultClass> :breakpoint: <alternativeClass>"
+```
+
+Beispiel:
+
+```
+<div class="col :: col-6 :md: col-4 :lg: col-2">
+```
+
+entspricht:
+
+```
+<div class="col col-6 col-md-4 col-lg-2">
+```

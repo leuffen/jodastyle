@@ -1,0 +1,41 @@
+Jodastyle ermöglicht die Manipulation des DOM mittels CSS attributen:
+
+Wrap:
+
+```html
+<div class=".box"></div>
+<div class=".box"></div>
+<div class=".box"></div>
+```
+
+```css
+.box {
+  --joda-wrap: @row;
+}
+```
+
+Wrappt die eine oder mehrere aufeinander folgende Element in ein neues Element. Das DOM Ergebnis:
+
+```html
+<div class="row">
+    <div class=".box"></div>
+    <div class=".box"></div>
+    <div class=".box"></div>
+</div>
+```
+
+Joda USE:
+
+Das wohl häufgste Element: --joda-use. Es ermöglicht die nutzung eines Templates. (Intern setzt das layout="use: xyz" Attribut lediglich --joda-use: xzy;)
+
+```html
+<div class="box" style="--joda-use='box'; --layout-cols: 3"></div>
+```
+
+ist das gleiche wie:
+
+```html
+<div class="box" layout="use: box; cols: 3"></div>
+```
+
+Beim use wird das das Template Element über das geuste element kopiert. (der Tag ändert sich ggf.)
