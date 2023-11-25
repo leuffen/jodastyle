@@ -1,17 +1,14 @@
 # Kickstart container config file - see https://gitub.com/infracamp/kickstart
 # Run ./kickstart.sh to start a development-container for this project
 version: 1
-from: "ghcr.io/nfra-project/kickstart-flavor-jekyll:2.0"
+from: "ghcr.io/nfra-project/kickstart-flavor-php:8.1"
 ports: "80:80;4000:4000;4100:4100"
+
+packages: [php8.1-curl, php8.1-http, php8.1-raphf]
 
 command:
   build:
-    - "jekyll build -s /opt/docs -d /var/www/html"
 
-  run:
-
-  jekyll: |
-    jekyll serve -s /opt/docs -d /var/www/html --drafts --livereload --port 4000 --livereload-port 4100 --host 0.0.0.0
 
   dev:
     - "killall webpack || echo 'No Proc'"

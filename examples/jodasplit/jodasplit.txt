@@ -1,0 +1,3 @@
+Jodasplit will take the input from jodasplit-input.html and reformat it to jodasplit-output.html.
+
+The flat input is reoganized as a tree structure. Provide detailed information about the structure of the output.

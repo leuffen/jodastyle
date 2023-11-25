@@ -1,0 +1,3 @@
+JodaTemplate applys Templates to the generated structure of the Jodasplit result based on the layout="" attribute.
+
+Show how Template developers can define Templates, how the <slot> elements work in template context.
