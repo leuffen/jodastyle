@@ -87,8 +87,6 @@ In the example above, we define a template named `header1` that can be used to c
 | `data-replace` | Indicates that the slot content should be replaced | `<slot data-replace></slot>`      |
 | `data-copy`    | Indicates that the content should be copied instead of moved | `<slot data-copy></slot>`         |
 
-
-FIXME: Slots are not replaced in the order they are defined in the template. First data-copy, then data-select, then default slot.
 Slots are replaced in the order they are defined within the template. An element can only be selected once unless the `data-copy` attribute is set. If no `<slot>` element without a `data-select` attribute is found, elements that are not explicitly selected will be removed.
 
 To add classes or wrap a sub-element of a slot into its own template, use the `data-child-class` attribute or the `--joda-wrap` command respectively.
@@ -164,9 +162,38 @@ For a detailed example of how JodaSplit processes input, see the [jodasplit-outp
 
 ### Responsive Design (Jodaresponsive)
 
-TODO: Add examples 
-
 JodaStyle includes a processor for responsive design, which applies classes based on the viewport size and custom responsive classes.
+
+#### Responsive Class Syntax
+
+The syntax for responsive classes is as follows:
+
+```
+class="class :: <defaultClass> :breakpoint: <alternativeClass>"
+```
+
+Example:
+
+```html
+<div class="col :: col-6 :md: col-4 :lg: col-2">
+```
+
+This is equivalent to:
+
+```html
+<div class="col col-6 col-md-4 col-lg-2">
+```
+
+#### Breakpoints
+
+| Breakpoint | Width  |
+|------------|--------|
+| xsm        | 0px    |
+| sm         | 576px  |
+| md         | 768px  |
+| lg         | 992px  |
+| xl         | 1200px |
+| xxl        | 1400px |
 
 For more information on how to use responsive design with JodaStyle, refer to the [Jodaresponsive](/processor/jodaresponsive.ts) processor.
 
