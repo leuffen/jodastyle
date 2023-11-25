@@ -8,12 +8,12 @@ class="classe :: <defaultClass> :breakpoint: <alternativeClass>"
 
 Beispiel:
 
-```
+```html
 <div class="col :: col-6 :md: col-4 :lg: col-2">
 ```
 
 entspricht:
 
-```
+```html
 <div class="col col-6 col-md-4 col-lg-2">
 ```

@@ -225,3 +225,4 @@ A: You can find examples throughout this documentation. Additionally, the [examp
 
 Q: How can I contribute to JodaStyle if I'm not a programmer?
 A: Non-programmers can contribute to JodaStyle by providing feedback, reporting issues, and suggesting improvements. Documentation contributions are also welcome.
+
