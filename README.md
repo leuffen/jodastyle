@@ -55,6 +55,10 @@ Joda.registerTemplate("header1", `
 | `data-select` | Selector for the content to replace the slot with | `<slot data-select="img"></slot>` |
 | `data-replace`| Indicates that the slot content should be replaced | `<slot data-replace></slot>`      |
 
+Slots are replaced in the order they are defined within the template. An element can only be selected once unless the `data-copy` attribute is set. If no `<slot>` element without a `data-select` attribute is found, elements that are not explicitly selected will be removed.
+
+To add classes or wrap a sub-element of a slot into its own template, use the `data-child-class` attribute or the `--joda-wrap` command respectively.
+
 ### Using Templates
 
 To apply a template, use the `layout` attribute:
@@ -65,6 +69,8 @@ To apply a template, use the `layout` attribute:
     <p>Some text here</p>
 </div>
 ```
+
+It's important to include the `#` symbol when referencing a template to avoid unexpected behavior.
 
 ### Processing HTML Input with JodaSplit
 
@@ -77,6 +83,10 @@ JodaSplit reorganizes flat HTML into a structured tree:
     ...
 </joda-split>
 ```
+
+JodaSplit transforms the input into a tree structure where `<h1>` and `<h2>` elements become `<section>` elements, while `<h3>` to `<h6>` become nested elements.
+
+You can use `<hr>` elements to insert sub-elements. Additional attributes and classes set on an element with the `layout=""` attribute will be preserved.
 
 ### Responsive Design
 
