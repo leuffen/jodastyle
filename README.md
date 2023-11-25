@@ -112,6 +112,17 @@ In the example above, the `layout="use: #header1"` attribute tells JodaStyle to 
 
 JodaStyle provides several commands for manipulating the DOM using CSS attributes:
 
+| Command               | Description                                                                 | Example Usage                                                                 |
+|-----------------------|-----------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| `--joda-wrap`         | Wraps elements with a new element                                           | `.box { --joda-wrap: @row; }`                                                 |
+| `--joda-use`          | Applies a template to the element                                           | `<div class="box" style="--joda-use='box'; --layout-cols: 3"></div>`          |
+| `--joda-replace-by`   | Replaces the element with the specified template                            | `--joda-replace-by: @header1;`                                                |
+| `--joda-container`    | Wraps the element's children with the specified container                   | `--joda-container: @container;`                                               |
+| `--joda-unwrap`       | Removes the parent element of the selected element                          | `--joda-unwrap: true;`                                                        |
+| `--joda-group`        | Groups consecutive elements with the same `--joda-group` value into a wrapper| `--joda-group: @row;`                                                         |
+| `--joda-class`        | Adds classes to the element                                                 | `--joda-class: 'new-class';`                                                  |
+| `--joda-on-empty-class`| Adds a class to the element if it is empty                                  | `--joda-on-empty-class: 'empty';`                                             |
+
 #### Wrap Command
 
 The `--joda-wrap` command wraps one or more consecutive elements in a new element:
