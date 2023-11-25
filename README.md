@@ -37,12 +37,11 @@ Here's a quick reference to the most important features of JodaStyle:
 - `--joda-class`
 - `--joda-on-empty-class`
 
-#### Attributes
-- `layout`
-- `data-select`
-- `data-replace`
-- `data-copy`
-- `data-child-class`
+#### Elements
+- `<slot [data-select=""] [data-copy] [data-limit=""] [data-replace] [data-child-*=""]>`
+- `<jodastyle>`
+- `<jodasplit>`
+
 
 ## Installation
 
