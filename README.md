@@ -87,6 +87,8 @@ In the example above, we define a template named `header1` that can be used to c
 | `data-replace` | Indicates that the slot content should be replaced | `<slot data-replace></slot>`      |
 | `data-copy`    | Indicates that the content should be copied instead of moved | `<slot data-copy></slot>`         |
 
+
+FIXME: Slots are not replaced in the order they are defined in the template. First data-copy, then data-select, then default slot.
 Slots are replaced in the order they are defined within the template. An element can only be selected once unless the `data-copy` attribute is set. If no `<slot>` element without a `data-select` attribute is found, elements that are not explicitly selected will be removed.
 
 To add classes or wrap a sub-element of a slot into its own template, use the `data-child-class` attribute or the `--joda-wrap` command respectively.
@@ -161,6 +163,8 @@ You can use `<hr>` elements to insert sub-elements. Additional attributes and cl
 For a detailed example of how JodaSplit processes input, see the [jodasplit-output.html](/jodasplit/jodasplit-output.html) file.
 
 ### Responsive Design (Jodaresponsive)
+
+TODO: Add examples 
 
 JodaStyle includes a processor for responsive design, which applies classes based on the viewport size and custom responsive classes.
 
