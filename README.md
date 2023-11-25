@@ -1,15 +1,15 @@
 
 # JodaStyle Documentation
 
-Welcome to the JodaStyle documentation. This guide is intended for developers who want to use or contribute to the JodaStyle project. JodaStyle is a library that enables DOM manipulation using CSS attributes and provides a set of tools for defining templates, restructuring HTML input, and implementing responsive design through custom attributes and CSS variables.
+Welcome to the JodaStyle documentation. This guide is intended for developers who want to use or contribute to the JodaStyle project. JodaStyle is a library that enables you to manipulate the DOM using CSS attributes and apply templates dynamically. It provides a set of tools for defining templates, restructuring HTML input, and implementing responsive design through the `layout=""` attribute and CSS variables.
 
 ## Table of Contents
 - [Overview](#overview)
 - [Installation](#installation)
 - [Usage](#usage)
-  - [DOM Manipulation](#dom-manipulation)
   - [Defining Templates](#defining-templates)
   - [Using Templates](#using-templates)
+  - [DOM Manipulation Commands](#dom-manipulation-commands)
   - [Processing HTML Input with JodaSplit](#processing-html-input-with-jodasplit)
   - [Responsive Design](#responsive-design)
 - [API Reference](#api-reference)
@@ -21,7 +21,7 @@ Welcome to the JodaStyle documentation. This guide is intended for developers wh
 
 ## Overview
 
-JodaStyle is a library designed to render Markdown-style HTML in the browser and apply templates dynamically. It provides a set of tools for defining templates, restructuring HTML input, and implementing responsive design through the `layout=""` attribute.
+JodaStyle is a library designed to render Markdown-style HTML in the browser and apply templates dynamically. It provides a set of tools for defining templates, restructuring HTML input, and implementing responsive design through the `layout=""` attribute and CSS variables.
 
 ## Installation
 
@@ -33,57 +33,11 @@ npm install @leuffen/jodastyle
 
 ## Usage
 
-### DOM Manipulation
-
-JodaStyle allows for DOM manipulation using CSS attributes. Here are some examples:
-
-#### Wrap
-
-Wrap multiple consecutive elements in a new element using the `--joda-wrap` attribute:
-
-```html
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-```
-
-```css
-.box {
-  --joda-wrap: @row;
-}
-```
-
-The resulting DOM:
-
-```html
-<div class="row">
-    <div class="box"></div>
-    <div class="box"></div>
-    <div class="box"></div>
-</div>
-```
-
-#### Joda USE
-
-The `--joda-use` attribute allows the use of a template:
-
-```html
-<div class="box" style="--joda-use='box'; --layout-cols: 3"></div>
-```
-
-Is equivalent to:
-
-```html
-<div class="box" layout="use: box; cols: 3"></div>
-```
-
-The template element is copied over the host element, potentially changing the tag.
-
 ### Defining Templates
 
-Templates are defined using the `Joda.registerTemplate` method. Here's an example of defining a template:
+Templates are registered using `Joda.registerTemplate`:
 
-```typescript
+```ts
 import { Joda } from "@leuffen/jodastyle";
 
 Joda.registerTemplate("header1", `
@@ -104,9 +58,42 @@ Joda.registerTemplate("header1", `
 `);
 ```
 
+Optional parameters for `registerTemplate` include callbacks and layout defaults. Callbacks can be used to execute functions after the template is connected to the DOM or after all templates are connected and initialized. Layout defaults provide default values for layout-related CSS variables.
+
+Example using callbacks:
+
+```ts
+Joda.registerTemplate("footer1", `
+    <footer class="tjs-footer1">
+        ...
+    </footer>
+`, {}, {
+    onAfterConnectedCallback: (element) => {
+        console.log("Footer template connected:", element);
+    },
+    onAfterAllTemplatesConnectedCallback: (element) => {
+        console.log("All templates connected:", element);
+    }
+});
+```
+
+In the example above, we define a template named `header1` that can be used to create a header section with text and an image. The `:: mobile :lg: ` syntax is used to apply responsive classes. The `<slot>` elements are placeholders that will be filled with content when the template is used.
+
+#### Slot Attributes
+
+| Attribute      | Description                                      | Example                           |
+|----------------|--------------------------------------------------|-----------------------------------|
+| `data-select`  | Selector for the content to replace the slot with | `<slot data-select="img"></slot>` |
+| `data-replace` | Indicates that the slot content should be replaced | `<slot data-replace></slot>`      |
+| `data-copy`    | Indicates that the content should be copied instead of moved | `<slot data-copy></slot>`         |
+
+Slots are replaced in the order they are defined within the template. An element can only be selected once unless the `data-copy` attribute is set. If no `<slot>` element without a `data-select` attribute is found, elements that are not explicitly selected will be removed.
+
+To add classes or wrap a sub-element of a slot into its own template, use the `data-child-class` attribute or the `--joda-wrap` command respectively.
+
 ### Using Templates
 
-To use a template, apply it using the `layout` attribute:
+To apply a template, use the `layout` attribute:
 
 ```html
 <div layout="use: #header1">
@@ -117,31 +104,79 @@ To use a template, apply it using the `layout` attribute:
 </div>
 ```
 
+It's important to include the `#` symbol when referencing a template to avoid unexpected behavior.
+
+In the example above, the `layout="use: #header1"` attribute tells JodaStyle to apply the `header1` template to the `div`. The `img` element will replace the first slot with `data-select="img"`, and the rest of the content will fill the default slot.
+
+### DOM Manipulation Commands
+
+JodaStyle provides several commands for manipulating the DOM using CSS attributes:
+
+#### Wrap Command
+
+The `--joda-wrap` command wraps one or more consecutive elements in a new element:
+
+```css
+.box {
+  --joda-wrap: @row;
+}
+```
+
+This will wrap elements with the class `.box` in a new element with the class `row`.
+
+#### Use Command
+
+The `--joda-use` command allows the use of a template:
+
+```html
+<div class="box" style="--joda-use='box'; --layout-cols: 3"></div>
+```
+
+This is equivalent to:
+
+```html
+<div class="box" layout="use: box; cols: 3"></div>
+```
+
+The `use` command copies the template element over the host element, potentially changing the tag.
+
 ### Processing HTML Input with JodaSplit
 
-JodaSplit reorganizes flat HTML into a structured tree. For detailed information about the structure of the output, refer to the [jodasplit-output.html](/jodasplit/jodasplit-output.html) file.
-
-### Responsive Design
-
-Jodaresponsive replaces media queries in CSS files, drastically reducing file sizes. The syntax in the `class` attribute is as follows:
+JodaSplit reorganizes flat HTML into a structured tree:
 
 ```html
-<div class="col :: col-6 :md: col-4 :lg: col-2"></div>
+<joda-split>
+    <nav layout="use: #navbar-switch1" class="floating">
+        ...
+    </nav>
+    <h1 layout="use: #header1" data-section-class="decreased-height">Kontakt</h1>
+    ...
+</joda-split>
 ```
 
-Is equivalent to:
+JodaSplit transforms the input into a tree structure where `<h1>` and `<h2>` elements become `<section>` elements, while `<h3>` to `<h6>` become nested elements.
 
-```html
-<div class="col col-6 col-md-4 col-lg-2"></div>
-```
+You can use `<hr>` elements to insert sub-elements. Additional attributes and classes set on an element with the `layout=""` attribute will be preserved.
+
+For a detailed example of how JodaSplit processes input, see the [jodasplit-output.html](/jodasplit/jodasplit-output.html) file.
+
+### Responsive Design (Jodaresponsive)
+
+JodaStyle includes a processor for responsive design, which applies classes based on the viewport size and custom responsive classes.
+
+For more information on how to use responsive design with JodaStyle, refer to the [Jodaresponsive](/processor/jodaresponsive.ts) processor.
 
 ## API Reference
 
-The API reference is available in the [index.ts](/index.ts) file, which includes exported functions and classes from the JodaStyle library.
+- `Joda.registerTemplate(name, template)`: Registers a new template.
+- `Joda.getRegisteredTemplate(name)`: Retrieves a registered template.
+- `JodaContentElement.setContent(content)`: Sets the content of a `JodaContentElement`.
+
+For a complete API reference, please refer to the [index.ts](/index.ts) file.
 
 ## Configuration
 
-JodaStyle can be configured using `jodaSiteConfig`. For example, to disable the use of templates:
+JodaStyle can be configured using `jodaSiteConfig`:
 
 ```javascript
 import { jodaSiteConfig } from "@leuffen/jodastyle";
@@ -159,7 +194,16 @@ jodaSiteConfig.debug_visualize = true;
 
 ## Contributing
 
-Contributions are welcome! Please refer to the [Contributing](#contributing) section for guidelines on how to contribute to the project.
+Contributions are welcome! If you would like to contribute to the project, please follow these steps:
+
+1. Fork the repository on GitHub.
+2. Clone your forked repository to your local machine.
+3. Create a new branch for your feature or bug fix.
+4. Make your changes and commit them to your branch.
+5. Push your changes to your fork on GitHub.
+6. Submit a pull request to the original repository.
+
+Please make sure to write clear commit messages and include tests for your changes if applicable.
 
 ## License
 
