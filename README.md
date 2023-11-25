@@ -27,15 +27,30 @@ JodaStyle is a library designed to render Markdown-style HTML in the browser and
 
 Here's a quick reference to the most important features of JodaStyle:
 
-#### Commands
-- `--joda-wrap`
-- `--joda-use`
-- `--joda-replace-by`
-- `--joda-container`
-- `--joda-unwrap`
-- `--joda-group`
-- `--joda-class`
-- `--joda-on-empty-class`
+#### Layouting Attributes
+
+- `layout="use: #templateName"`
+
+#### CSS Attributes
+
+Here are some examples of CSS attributes you can use with JodaStyle:
+
+- `--joda-wrap`: Wraps elements with a new element.
+  - Example: `.box { --joda-wrap: @row; }`
+- `--joda-use`: Applies a template to the element.
+  - Example: `<div class="box" style="--joda-use='box'; --layout-cols: 3"></div>`
+- `--joda-replace-by`: Replaces the element with the specified template.
+  - Example: `--joda-replace-by: @header1;`
+- `--joda-container`: Wraps the element's children with the specified container.
+  - Example: `--joda-container: @container;`
+- `--joda-unwrap`: Removes the parent element of the selected element.
+  - Example: `--joda-unwrap: true;`
+- `--joda-group`: Groups consecutive elements with the same `--joda-group` value into a wrapper.
+  - Example: `--joda-group: @row;`
+- `--joda-class`: Adds classes to the element.
+  - Example: `--joda-class: 'new-class';`
+- `--joda-on-empty-class`: Adds a class to the element if it is empty.
+  - Example: `--joda-on-empty-class: 'empty';`
 
 #### Elements
 - `<slot [data-select=""] [data-copy] [data-limit=""] [data-replace] [data-child-*=""]>`
