@@ -12,7 +12,7 @@ command:
 
   dev:
     - "killall webpack || echo 'No Proc'"
-    - "D:kick jekyll"
+    - "D:kick webpack serve"
 
   init-workspaces:
     - "mkdir -p workspaces"
