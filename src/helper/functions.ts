@@ -4,6 +4,7 @@ import {DefaultLayout} from "../types/DefaultLayout";
 import {JodaElementException} from "./JodaElementException";
 import {QTemplate, template_parse} from "./QTemplate";
 import {Joda} from "../joda";
+import {JodaErrorElement} from "./JodaErrorElement";
 
 
 
@@ -133,6 +134,41 @@ function copyDataChildAttributes(source : HTMLElement, target : HTMLElement) {
 }
 
 
+/**
+ * Allow multiple Queries separated by || statement. Returns first element found
+ *
+ * @param selector
+ * @param element
+ * @param limit
+ * @returns Element found
+ */
+function queryMulti (selector : string, element : HTMLElement, limit : number = null) : Element[] {
+
+    let selectors = selector.split("||");
+    for (let sel of selectors) {
+        sel = sel.trim();
+        if (sel === "")
+            return [element];
+        try {
+            let found = element.querySelectorAll(sel);
+            if (found.length === 0)
+                continue;
+            if (limit === null) {
+                return Array.from(found);
+            }
+
+            return Array.from(found).slice(0, limit);
+        } catch (e) {
+            console.warn("Invalid selector: ", sel, "on element", element);
+            return [new JodaErrorElement("Invalid selector: " + sel + " on element " + element)];
+            continue;
+        }
+
+
+    }
+    return [];
+}
+
 
 let slotIndex = 0;
 export async function getTemplateFilledWithContent(templateSelector : string, content : HTMLElement, origElement : HTMLElement) : Promise<DocumentFragment> {
@@ -191,9 +227,9 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
 
         let selected : any;
         if (slot.getAttribute("data-limit") === "1") {
-            selected = Array.from([content.querySelector(select)]).map((element) => element.cloneNode(true));
+            selected = queryMulti(select, content, 1).map((element) => element.cloneNode(true));
         } else {
-            selected = Array.from(content.querySelectorAll(select)).map((element) => element.cloneNode(true));
+            selected = queryMulti(select, content).map((element) => element.cloneNode(true));
         }
 
         selected.forEach((element) => {
@@ -223,14 +259,9 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
 
         let selected: any;
         if (slot.getAttribute("data-limit") === "1") {
-            let curElements = content.querySelector(select);
-            if (curElements === null) {
-                selected = [];
-            } else {
-                selected = Array.from([content.querySelector(select)]);
-            }
+            selected = queryMulti(select, content, 1)
         } else {
-            selected = Array.from(content.querySelectorAll(select));
+            selected = queryMulti(select, content)
         }
         if (selected.length === 0) {
             console.warn("No element found for selector: " + select + " in template: " + templateSelector + " for slot: ", slot);

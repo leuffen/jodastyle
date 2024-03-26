@@ -20,6 +20,17 @@ interface JodaSplitConfig {
  * @param target
  */
 function copySectionAttributes(source : HTMLElement, target : HTMLElement) {
+
+    for(let className of source.getAttribute("class")?.split(" ") || []){
+        // if className starts with sec- it is a section class. Copy the name after sec- and add it to the target
+        // remove the sec- prefix
+
+        if (className.startsWith("sec-")) {
+            target.classList.add(className.substr(4));
+            source.classList.remove(className);
+        }
+    }
+
     source.getAttributeNames().forEach((name : string) => {
 
         if ( ! name.startsWith("data-section-")) {
@@ -105,7 +116,7 @@ export class Jodasplit {
                 let layer = 1;
                 let tag = "div";
 
-                if (child.matches("h1,h2,.section-h2")) {
+                if (child.matches("h1,h2,.section-h2") && !child.matches(".section-h3, .section-h4")) {
                     layer = lastLayer = 1;
                     tag = "section";
                 } else if (child.matches("h3, h4, h5, h6, h7, h8, h9, .section-h3, .section-h4")) {
