@@ -237,6 +237,7 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
         })
 
         if (selected.length === 0) {
+            slot.classList.add("emptyslot");
             console.warn("No element found for selector: " + select + " in template: " + templateSelector + " for slot: ", slot);
             return;
         }
@@ -264,6 +265,7 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
             selected = queryMulti(select, content)
         }
         if (selected.length === 0) {
+            slot.classList.add("emptyslot");
             console.warn("No element found for selector: " + select + " in template: " + templateSelector + " for slot: ", slot);
             return;
         }
@@ -297,7 +299,11 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
     if (slot !== null && slot.hasAttribute("data-replace")) {
         slot.replaceWith(...Array.from(content.children));
     } else if (slot !== null) {
-        slot.append(...Array.from(content.children));
+        let addChildren = Array.from(content.children);
+        if (addChildren.length === 0) {
+            slot.classList.add("emptyslot");
+        }
+        slot.append(...addChildren);
     } else {
         content.remove();
     }
