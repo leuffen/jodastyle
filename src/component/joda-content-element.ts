@@ -116,6 +116,7 @@ export class JodaContentElement extends HTMLElement {
         for(let callback of allTemplatesConnectedCallbacks) {
             await callback();
         }
+        window.dispatchEvent(new CustomEvent("JodaContentReady", {detail: {element: this}}));
     }
 
 

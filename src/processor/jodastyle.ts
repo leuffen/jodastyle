@@ -34,6 +34,7 @@ export class Jodastyle {
                 continue;
             }
             child["joda-style-processed"] = true;
+            let origChild = child;
 
             let style = getComputedStyle(child);
             let parentStyle = null;
@@ -73,6 +74,7 @@ export class Jodastyle {
 
             }
             await this.process(child); // Recursive parse replaced elements
+
         }
 
     }
