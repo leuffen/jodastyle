@@ -213,7 +213,7 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
     }, content);
 
     let clone = document.createRange().createContextualFragment(templateHtml);
-
+    console.log(templateSelector, "Content: ", content.innerHTML);
     let done = [];
 
     clone.querySelectorAll("slot[data-select][data-copy]").forEach((slot) => {
@@ -232,9 +232,19 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
             selected = queryMulti(select, content).map((element) => element.cloneNode(true));
         }
 
-        selected.forEach((element) => {
-            copyDataChildAttributes(slot as HTMLElement, element);
-        })
+        if (slot.hasAttribute("data-select-text") && selected) {
+            Array.from(selected).forEach((element : HTMLElement) => {
+                slot.textContent += element.textContent;
+                element.remove();
+            })
+
+        } else if (selected) {
+            selected.forEach((element) => {
+                copyDataChildAttributes(slot as HTMLElement, element);
+            })
+        }
+
+
 
         if (selected.length === 0) {
             slot.classList.add("emptyslot");
@@ -269,9 +279,19 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
             console.warn("No element found for selector: " + select + " in template: " + templateSelector + " for slot: ", slot);
             return;
         }
-        selected.forEach((element) => {
-            copyDataChildAttributes(slot as HTMLElement, element);
-        })
+        if (slot.hasAttribute("data-select-text") && selected) {
+            selected.forEach((element : HTMLElement) => {
+                slot.textContent += element.textContent;
+                element.remove();
+            })
+
+            return ;
+        } else if (selected) {
+            selected.forEach((element) => {
+                copyDataChildAttributes(slot as HTMLElement, element);
+            })
+        }
+
 
 
 
@@ -299,11 +319,18 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
     if (slot !== null && slot.hasAttribute("data-replace")) {
         slot.replaceWith(...Array.from(content.children));
     } else if (slot !== null) {
-        let addChildren = Array.from(content.children);
-        if (addChildren.length === 0) {
-            slot.classList.add("emptyslot");
+
+        if (slot.hasAttribute("data-select-text")) {
+            slot.textContent += content.textContent;
+        } else {
+            let addChildren = Array.from(content.children);
+            if (addChildren.length === 0) {
+                slot.classList.add("emptyslot");
+            }
+            slot.append(...addChildren);
         }
-        slot.append(...addChildren);
+
+
     } else {
         content.remove();
     }

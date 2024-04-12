@@ -116,12 +116,12 @@ In the example above, we define a template named `header1` that can be used to c
 
 #### Slot Attributes
 
-| Attribute      | Description                                      | Example                           |
-|----------------|--------------------------------------------------|-----------------------------------|
-| `data-select`  | Selector for the content to replace the slot with | `<slot data-select="img"></slot>` |
-| `data-replace` | Indicates that the slot content should be replaced | `<slot data-replace></slot>`      |
-| `data-copy`    | Indicates that the content should be copied instead of moved | `<slot data-copy></slot>`         |
-
+| Attribute      | Description                                      | Example                                                 |
+|----------------|--------------------------------------------------|---------------------------------------------------------|
+| `data-select`  | Selector for the content to replace the slot with | `<slot data-select="img"></slot>`                       |
+| `data-replace` | Indicates that the slot content should be replaced | `<slot data-replace></slot>`                            |
+| `data-copy`    | Indicates that the content should be copied instead of moved | `<slot data-copy></slot>`                               |
+| `data-select-text` | Selects text content only | `<slot data-select="selector" data-select-text></slot>` |
 Slots are replaced in the order they are defined within the template. An element can only be selected once unless the `data-copy` attribute is set. If no `<slot>` element without a `data-select` attribute is found, elements that are not explicitly selected will be removed.
 
 To add classes or wrap a sub-element of a slot into its own template, use the `data-child-class` attribute or the `--joda-wrap` command respectively.
