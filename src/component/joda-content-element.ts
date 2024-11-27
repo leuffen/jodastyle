@@ -56,6 +56,19 @@ export class JodaContentElement extends HTMLElement {
 
         document.body.classList.add("loaded");
         document.querySelector("html").classList.remove("loader");
+
+
+        if (window.location.hash) {
+            let hash = window.location.hash.substring(1);
+            // urldecode hash
+            hash = decodeURIComponent(hash);
+            const element = document.getElementById(hash);
+            console.log("Scrolling to", window.location.hash, element);
+            if (element) {
+                element.scrollIntoView({behavior: "smooth"});
+            }
+        }
+
     }
 
 

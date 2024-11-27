@@ -218,3 +218,24 @@ jodaStyleCommands["--joda-on-empty-class"] = async (value : string, target, elem
     }
     return element
 };
+
+
+jodaStyleCommands["--joda-hide-empty"] = async(value : string, target, element : HTMLElement, logger : Logger) => {
+    function hideEmptyElements(node : HTMLElement) {
+        if (node.querySelectorAll("img, iframe").length > 0) {
+            return;
+        }
+        if (node.textContent.trim() !== "") {
+            return;
+        }
+        node.style.setProperty("display", "none", "important");
+    }
+
+    if (value === "true" || value === "1" || value === "yes" || value === "on") {
+        hideEmptyElements(element);
+    }
+
+
+    return element;
+}
+
