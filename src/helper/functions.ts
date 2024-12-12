@@ -213,7 +213,7 @@ export async function getTemplateFilledWithContent(templateSelector : string, co
     }, content);
 
     let clone = document.createRange().createContextualFragment(templateHtml);
-    console.log(templateSelector, "Content: ", content.innerHTML);
+    //console.log(templateSelector, "Content: ", content.innerHTML);
     let done = [];
 
     clone.querySelectorAll("slot[data-select][data-copy]").forEach((slot) => {

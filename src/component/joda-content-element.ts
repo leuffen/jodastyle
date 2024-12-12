@@ -63,7 +63,7 @@ export class JodaContentElement extends HTMLElement {
             // urldecode hash
             hash = decodeURIComponent(hash);
             const element = document.getElementById(hash);
-            console.log("Scrolling to", window.location.hash, element);
+            //console.log("Scrolling to", window.location.hash, element);
             if (element) {
                 element.scrollIntoView({behavior: "smooth"});
             }
