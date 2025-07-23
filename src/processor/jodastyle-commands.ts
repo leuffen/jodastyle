@@ -163,11 +163,11 @@ jodaStyleCommands["--joda-use"] = async(value : string, target, element : HTMLEl
 
             // copy attributes but. Append class and styles
             if (attrName === "class") {
-                firstElement.setAttribute(attrName, element.getAttribute(attrName) + " " + firstElement.getAttribute(attrName) ?? "");
+                firstElement.setAttribute(attrName, element.getAttribute(attrName) + " " + firstElement.getAttribute(attrName));
                 return;
             }
             if (attrName === "style") {
-                firstElement.setAttribute(attrName, element.getAttribute(attrName) + " " + firstElement.getAttribute(attrName) ?? "");
+                firstElement.setAttribute(attrName, element.getAttribute(attrName) + " " + firstElement.getAttribute(attrName));
                 return;
             }
             if(attrName.startsWith("layout")) {
