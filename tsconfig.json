@@ -8,14 +8,13 @@
     "allowJs": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-
-
+    "skipLibCheck": true,
     "emitDecoratorMetadata": true,
     "moduleResolution": "node",
     "lib": [
       "es2021",
       "dom"
-    ],
+    ]
 
   },
   "include": [
