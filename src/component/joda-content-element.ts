@@ -62,11 +62,22 @@ export class JodaContentElement extends HTMLElement {
             let hash = window.location.hash.substring(1);
             // urldecode hash
             hash = decodeURIComponent(hash);
-            const element = document.getElementById(hash);
-            //console.log("Scrolling to", window.location.hash, element);
-            if (element) {
-                element.scrollIntoView({behavior: "smooth"});
+            const scrollToHash = () => {
+
+                const element = document.getElementById(hash);
+                //console.log("Scrolling to", window.location.hash, element);
+                if (element) {
+                    const el = document.querySelector("#" + hash) as HTMLElement;
+                    // 33 % of window height
+                    const offset = window.innerHeight * 0.33;
+
+                    const top = el.getBoundingClientRect().top + window.scrollY - offset;
+                    window.scrollTo({ top, behavior: "smooth" });
+                }
             }
+            scrollToHash();
+            window.addEventListener("load", scrollToHash);
+
         }
 
     }
